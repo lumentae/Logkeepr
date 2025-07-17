@@ -35,11 +35,10 @@ import dev.lumentae.logkeepr.screen.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        //val db = Room.databaseBuilder(
-        //    applicationContext,
-        //    AppDatabase::class.java, "logkeepr"
-        //).build()
-
+        val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "logkeepr"
+        ).build()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
