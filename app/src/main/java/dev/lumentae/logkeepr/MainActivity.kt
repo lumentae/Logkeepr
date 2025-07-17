@@ -6,7 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.AddCircleOutline
+import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.Insights
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarDefaults
@@ -18,18 +22,24 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.room.Room
+import dev.lumentae.logkeepr.data.AppDatabase
 import dev.lumentae.logkeepr.ui.theme.LogkeeprTheme
 import dev.lumentae.logkeepr.screen.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        //val db = Room.databaseBuilder(
+        //    applicationContext,
+        //    AppDatabase::class.java, "logkeepr"
+        //).build()
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -75,7 +85,6 @@ fun AppNavHost(
     }
 }
 
-@Preview()
 @Composable
 fun AppNavigationBar(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
