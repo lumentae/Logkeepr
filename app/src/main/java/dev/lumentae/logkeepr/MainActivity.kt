@@ -18,20 +18,23 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.room.Room
 import dev.lumentae.logkeepr.data.AppDatabase
-import dev.lumentae.logkeepr.ui.theme.LogkeeprTheme
 import dev.lumentae.logkeepr.screen.*
+import dev.lumentae.logkeepr.screen.project.ProjectsScreen
+import dev.lumentae.logkeepr.screen.project.ViewProjectScreen
+import dev.lumentae.logkeepr.ui.theme.LogkeeprTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,8 +42,8 @@ class MainActivity : ComponentActivity() {
             applicationContext,
             AppDatabase::class.java, "logkeepr"
         )
-        .allowMainThreadQueries()
-        .build()
+            .allowMainThreadQueries()
+            .build()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -77,11 +80,20 @@ fun AppNavHost(
             composable(destination.route) {
                 when (destination) {
                     Destination.HOME -> HomeScreen(modifier)
-                    Destination.PROJECTS -> ProjectsScreen(modifier)
+                    Destination.PROJECTS -> ProjectsScreen(modifier, navController)
                     Destination.LOG -> LogScreen(modifier)
                     Destination.STATS -> StatsScreen(modifier)
                     Destination.SETTINGS -> SettingsScreen(modifier)
                 }
+            }
+        }
+        composable("ViewProject/{projectId}") { backStackEntry ->
+            val projectId = backStackEntry.arguments?.getString("projectId")?.toLongOrNull()
+            if (projectId != null) {
+                val project = Globals.DATABASE.projectDao().getProjectById(projectId)
+                ViewProjectScreen(modifier, project, navController)
+            } else {
+                Text("Project not found", modifier = Modifier.padding(16.dp))
             }
         }
     }
