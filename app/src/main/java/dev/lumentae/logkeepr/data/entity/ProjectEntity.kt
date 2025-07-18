@@ -8,9 +8,7 @@ import androidx.room.PrimaryKey
 data class ProjectEntity(
     @PrimaryKey val id: Long,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "description") val description: String? = null,
-    @ColumnInfo(name = "icon") val icon: String? = null,
-    @ColumnInfo(name = "color") val color: String? = null,
     @ColumnInfo(name = "created_at") val createdAt: Long,
-    @ColumnInfo(name = "updated_at") val updatedAt: Long
+    @ColumnInfo(name = "description") val description: String? = null,
+    @ColumnInfo(name = "color") val color: String? = null, // Hex color code
 )

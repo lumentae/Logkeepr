@@ -38,7 +38,9 @@ class MainActivity : ComponentActivity() {
         Globals.DATABASE = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "logkeepr"
-        ).build()
+        )
+        .allowMainThreadQueries()
+        .build()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -51,11 +53,12 @@ class MainActivity : ComponentActivity() {
 
 enum class Destination(
     val route: String,
-    val icon: ImageVector
+    val icon: ImageVector,
+    val showInBottomBar: Boolean = true
 ) {
     HOME("Home", Icons.Default.Dashboard),
     PROJECTS("Projects", Icons.Default.Folder),
-    LOG("Log", Icons.Default.AddCircleOutline),
+    LOG("Log", Icons.Default.AddCircleOutline, false),
     STATS("Stats", Icons.Default.Insights),
     SETTINGS("Settings", Icons.Default.Settings)
 }
@@ -95,6 +98,7 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
         bottomBar = {
             NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
                 Destination.entries.forEachIndexed { index, destination ->
+                    if (!destination.showInBottomBar) return@forEachIndexed
                     NavigationBarItem(
                         selected = selectedDestination == index,
                         onClick = {
