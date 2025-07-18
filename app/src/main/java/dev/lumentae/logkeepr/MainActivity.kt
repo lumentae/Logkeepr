@@ -35,7 +35,7 @@ import dev.lumentae.logkeepr.screen.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        val db = Room.databaseBuilder(
+        Globals.DATABASE = Room.databaseBuilder(
             applicationContext,
             AppDatabase::class.java, "logkeepr"
         ).build()
