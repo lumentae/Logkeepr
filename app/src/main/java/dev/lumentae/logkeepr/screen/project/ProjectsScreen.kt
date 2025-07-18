@@ -1,4 +1,4 @@
-package dev.lumentae.logkeepr.screen
+package dev.lumentae.logkeepr.screen.project
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -18,14 +20,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import dev.lumentae.logkeepr.Globals
 import dev.lumentae.logkeepr.data.entity.ProjectEntity
 import dev.lumentae.logkeepr.data.entity.TagEntity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProjectsScreen(modifier: Modifier) {
+fun ProjectsScreen(modifier: Modifier, navController: NavController) {
     var projectDao = Globals.DATABASE.projectDao()
     var projects = projectDao.getAllProjects()
     var tags = projectDao.getAllTags()
@@ -41,13 +44,15 @@ fun ProjectsScreen(modifier: Modifier) {
 
                 shouldShowDialog.value = false
                 // Refresh projects list after adding a new project
-                projectDao.insertProject(ProjectEntity(
-                    name = projectName,
-                    id = System.currentTimeMillis(),
-                    createdAt = System.currentTimeMillis(),
-                    description = description,
-                    color = color
-                ))
+                projectDao.insertProject(
+                    ProjectEntity(
+                        name = projectName,
+                        id = System.currentTimeMillis(),
+                        createdAt = System.currentTimeMillis(),
+                        description = description,
+                        color = color
+                    )
+                )
                 projects = projectDao.getAllProjects()
             },
             onCancel = {
@@ -79,7 +84,10 @@ fun ProjectsScreen(modifier: Modifier) {
         ) {
             projects.forEach { project ->
                 item(key = project.id) {
-                    ProjectCard(project, tags)
+                    ProjectCard(project, tags, onClick = {
+                        // Navigate to ViewProjectScreen with project ID
+                        navController.navigate("ViewProject/${project.id}")
+                    })
                 }
             }
             if (projects.isEmpty()) {
@@ -101,10 +109,25 @@ fun ProjectsScreen(modifier: Modifier) {
 }
 
 @Composable
-fun ProjectCard(project: ProjectEntity, tags: List<TagEntity>) {
+fun ProjectCard(
+    project: ProjectEntity,
+    tags: List<TagEntity>,
+    showTagAddButton: Boolean = false,
+    hasButtons: Boolean = false,
+    onClick: () -> Unit = {},
+    buttons: @Composable () -> Unit = {}
+) {
     Card(
         elevation = CardDefaults.cardElevation(),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        onClick = onClick,
+        colors = CardDefaults.cardColors(
+            containerColor = try {
+                Color(android.graphics.Color.parseColor(project.color))
+            } catch (_: Exception) {
+                Color.Unspecified
+            }
+        )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(project.name, style = MaterialTheme.typography.titleMedium)
@@ -120,10 +143,54 @@ fun ProjectCard(project: ProjectEntity, tags: List<TagEntity>) {
             }
 
             // Tags
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            if (showTagAddButton) {
+                Spacer(Modifier.height(8.dp))
+            }
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
                 tags.forEach {
-                    AssistChip(onClick = {}, label = { Text(it.name) })
+                    AssistChip(
+                        onClick = {},
+                        label = {
+                            Text(it.name)
+                        },
+                        colors = AssistChipDefaults.assistChipColors(
+                            containerColor = try {
+                                Color(android.graphics.Color.parseColor(it.color))
+                            } catch (_: Exception) {
+                                MaterialTheme.colorScheme.surfaceVariant
+                            },
+                        ),
+                        modifier = Modifier
+                            .height(24.dp)
+                    )
                 }
+                if (showTagAddButton) {
+                    AssistChip(
+                        onClick = {},
+                        label = {
+                            Text(
+                                "+",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontSize = 12.sp
+                            )
+                        },
+                        colors = AssistChipDefaults.assistChipColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        ),
+                        modifier = Modifier
+                            .height(24.dp)
+                    )
+                }
+            }
+
+            // Buttons
+            Spacer(Modifier.height(8.dp))
+            if (hasButtons) {
+                buttons()
             }
         }
     }
