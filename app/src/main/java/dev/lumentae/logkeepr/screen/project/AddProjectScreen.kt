@@ -1,4 +1,4 @@
-package dev.lumentae.logkeepr.screen
+package dev.lumentae.logkeepr.screen.project
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -31,13 +32,11 @@ fun AddProjectScreen(
     onProjectAdded: (Triple<String, String, String>) -> Unit,
     onCancel: () -> Unit,
     projects: List<ProjectEntity>
-    ) {
+) {
     val name = remember { mutableStateOf("") }
     val nameError = remember { mutableStateOf(false) }
-
     val description = remember { mutableStateOf("") }
-
-    val color = remember { mutableStateOf("") }
+    val color = remember { mutableStateOf("#") }
     val colorError = remember { mutableStateOf(false) }
 
     Dialog(onDismissRequest = { onCancel() }) {
@@ -55,11 +54,17 @@ fun AddProjectScreen(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Text(
+                    text = "Add Project",
+                    style = MaterialTheme.typography.headlineMedium,
+                    modifier = Modifier.padding(16.dp)
+                )
                 TextField(
                     value = name.value,
                     onValueChange = {
                         name.value = it
-                        nameError.value = it.isEmpty() || projects.any { project -> project.name == it }
+                        nameError.value =
+                            it.isEmpty() || projects.any { project -> project.name == it }
                     },
                     isError = projects.any { it.name == name.value } || name.value.isEmpty(),
                     label = { Text("Project Name") },
@@ -80,7 +85,7 @@ fun AddProjectScreen(
                     Box(
                         modifier = Modifier
                             .size(40.dp)
-                            .offset(y=24.dp, x=12.dp)
+                            .offset(y = 24.dp, x = 12.dp)
                             .background(
                                 color = try {
                                     Color(android.graphics.Color.parseColor(color.value))
@@ -93,9 +98,16 @@ fun AddProjectScreen(
                     TextField(
                         value = color.value,
                         onValueChange = {
-                            if (it.length > 7) return@TextField
+                            if (!it.startsWith("#")) {
+                                color.value = "#"
+                                return@TextField
+                            }
+                            if (it.length > 7)
+                                return@TextField
+
                             color.value = it
-                            colorError.value = !Regex("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$").matches(it)
+                            colorError.value =
+                                !Regex("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$").matches(it)
                         },
                         isError = !Regex("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$").matches(color.value),
                         label = { Text("Color (Hex)") },
@@ -108,7 +120,7 @@ fun AddProjectScreen(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.End,
                 ) {
                     TextButton(
                         onClick = { onCancel() },
