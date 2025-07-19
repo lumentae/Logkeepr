@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "entries")
 data class EntryEntity(
-    @PrimaryKey val id: Long,
-    @ColumnInfo(name = "project_id") val projectId: Long,
-    @ColumnInfo(name = "timestamp") val timestamp: Long,
-    @ColumnInfo(name = "title") val title: String,
-    @ColumnInfo(name = "content") val content: String,
+    @PrimaryKey var id: Long,
+    @ColumnInfo(name = "project_id") var projectId: Long,
+    @ColumnInfo(name = "timestamp") var timestamp: Long,
+    @ColumnInfo(name = "title") var title: String,
+    @ColumnInfo(name = "content") var content: String,
 )

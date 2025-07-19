@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -36,7 +34,7 @@ fun ProjectsScreen(modifier: Modifier, navController: NavController) {
     val shouldShowDialog = remember { mutableStateOf(false) }
 
     if (shouldShowDialog.value) {
-        AddProjectScreen(
+        ModifyProjectScreen(
             onProjectAdded = {
                 var projectName = it.first
                 var description = it.second
@@ -136,7 +134,7 @@ fun ProjectCard(
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    project.description,
+                    project.description!!,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

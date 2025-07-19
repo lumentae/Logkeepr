@@ -30,15 +30,19 @@ import androidx.compose.ui.window.Dialog
 import dev.lumentae.logkeepr.data.entity.ProjectEntity
 
 @Composable
-fun AddProjectScreen(
+fun ModifyProjectScreen(
     onProjectAdded: (Triple<String, String, String>) -> Unit,
     onCancel: () -> Unit,
-    projects: List<ProjectEntity>
+    projects: List<ProjectEntity>,
+    editing: Boolean = false,
+    name: String = "",
+    description: String = "",
+    color: String = "#",
 ) {
-    val name = remember { mutableStateOf("") }
+    val name = remember { mutableStateOf(name) }
     val nameError = remember { mutableStateOf(false) }
-    val description = remember { mutableStateOf("") }
-    val color = remember { mutableStateOf("#") }
+    val description = remember { mutableStateOf(description) }
+    val color = remember { mutableStateOf(color) }
     val colorError = remember { mutableStateOf(false) }
 
     Dialog(onDismissRequest = { onCancel() }) {
@@ -57,7 +61,7 @@ fun AddProjectScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "Add Project",
+                    text = if (editing) "Edit Project" else "Add Project",
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(4.dp)
                 )
@@ -72,7 +76,8 @@ fun AddProjectScreen(
                     label = { Text("Project Name") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp)
+                        .padding(16.dp),
+                    singleLine = true,
                 )
                 TextField(
                     value = description.value,
