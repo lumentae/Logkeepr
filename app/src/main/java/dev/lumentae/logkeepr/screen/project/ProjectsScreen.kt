@@ -26,17 +26,17 @@ import androidx.navigation.NavController
 import dev.lumentae.logkeepr.Globals
 import dev.lumentae.logkeepr.data.entity.ProjectEntity
 import dev.lumentae.logkeepr.data.entity.TagEntity
-import dev.lumentae.logkeepr.screen.entry.formatDurationToString
-import dev.lumentae.logkeepr.screen.tag.ModifyTagScreen
+import dev.lumentae.logkeepr.screen.project.tag.ModifyTagScreen
+import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProjectsScreen(modifier: Modifier, navController: NavController) {
+fun ProjectsScreen(modifier: Modifier, navController: NavController, createNewProject: Boolean = false) {
     var projectDao = Globals.DATABASE.projectDao()
     var projects = projectDao.getAllProjects()
     var tags = projectDao.getAllTags()
 
-    val shouldShowDialog = remember { mutableStateOf(false) }
+    val shouldShowDialog = remember { mutableStateOf(createNewProject) }
 
     if (shouldShowDialog.value) {
         ModifyProjectScreen(
@@ -207,7 +207,7 @@ fun ProjectCard(
             Text(project.name, style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(4.dp))
             Text(
-                "⌚ ${formatDurationToString(project.timeSpent)}",
+                "🕒 ${formatDurationToString(project.timeSpent)}",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
