@@ -11,4 +11,5 @@ data class EntryEntity(
     @ColumnInfo(name = "timestamp") var timestamp: Long,
     @ColumnInfo(name = "title") var title: String,
     @ColumnInfo(name = "content") var content: String,
+    @ColumnInfo(name = "time_spent") var timeSpent: Long
 )

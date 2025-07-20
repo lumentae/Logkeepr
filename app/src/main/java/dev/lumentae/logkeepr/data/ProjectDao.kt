@@ -25,6 +25,8 @@ interface ProjectDao {
     @Delete
     fun deleteProject(project: ProjectEntity)
 
+    @Query("SELECT SUM(time_spent) FROM entries WHERE project_id = :projectId ")
+    fun getProjectTimeSpent(projectId: Long): Long
 
     // Taq query methods
     @Query("SELECT * FROM tags")
@@ -44,7 +46,6 @@ interface ProjectDao {
 
     @Delete
     fun deleteTag(tag: TagEntity)
-
 
     // Entry query methods
     @Query("SELECT * FROM entries")

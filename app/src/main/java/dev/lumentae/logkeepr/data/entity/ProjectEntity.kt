@@ -11,4 +11,5 @@ data class ProjectEntity(
     @ColumnInfo(name = "created_at") var createdAt: Long,
     @ColumnInfo(name = "description") var description: String? = null,
     @ColumnInfo(name = "color") var color: String? = null, // Hex color code
+    @ColumnInfo(name = "time_spent") var timeSpent: Long = 0L // Time spent in seconds
 )

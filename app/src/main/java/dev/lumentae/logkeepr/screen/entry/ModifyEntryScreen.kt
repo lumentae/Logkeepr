@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -17,23 +18,30 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import dev.lumentae.logkeepr.data.entity.EntryEntity
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModifyEntryScreen(
-    onEntryAdded: (Pair<String, String>) -> Unit,
+    onEntryAdded: (Triple<String, String, Long>) -> Unit,
     onCancel: () -> Unit,
     editing: Boolean = false,
     title: String = "",
     description: String = "",
+    timeSpent: String = "",
 ) {
-    val title = remember { mutableStateOf(title) }
-    val description = remember { mutableStateOf(description) }
+    var title by remember { mutableStateOf(title) }
+    var description by remember { mutableStateOf(description) }
+    var timeSpent by remember { mutableStateOf(timeSpent) }
+    var timeSpentError by remember { mutableStateOf(false) }
+    var timeSpentDuration by remember { mutableLongStateOf(0) }
 
     Dialog(onDismissRequest = { onCancel() }) {
         // Draw a rectangle shape with rounded corners inside the dialog
@@ -56,11 +64,11 @@ fun ModifyEntryScreen(
                     modifier = Modifier.padding(4.dp)
                 )
                 TextField(
-                    value = title.value,
+                    value = title,
                     onValueChange = {
-                        title.value = it
+                        title = it
                     },
-                    isError = title.value.isEmpty(),
+                    isError = title.isEmpty(),
                     label = { Text("Entry Title") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -68,12 +76,35 @@ fun ModifyEntryScreen(
                     singleLine = true,
                 )
                 TextField(
-                    value = description.value,
-                    onValueChange = { description.value = it },
+                    value = description,
+                    onValueChange = { description = it },
                     label = { Text("Description") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
+                )
+                TextField(
+                    value = timeSpent,
+                    onValueChange = {
+                        timeSpentError = !Regex("^(?=.*\\d+[dhms])(?:(\\d+)d\\s*)?(?:(\\d+)h\\s*)?(?:(\\d+)m\\s*)?(?:(\\d+)s)?\$").matches(it)
+                        timeSpent = it
+                        if (!timeSpentError) {
+                            timeSpentDuration = parseDurationToSeconds(it) // Validate the input
+                        }
+                    },
+                    isError = timeSpentError,
+                    label = { Text("Time Spent (optional)") },
+                    supportingText = {
+                        if (timeSpentError) {
+                            Text("Invalid format. Use d, h, m, s (e.g., 1d 2h 30m 15s)")
+                        } else if (timeSpent.isNotEmpty()) {
+                            Text("Format: d (days), h (hours), m (minutes), s (seconds)")
+                        }
+                    },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
                 )
                 Row(
                     modifier = Modifier
@@ -88,10 +119,10 @@ fun ModifyEntryScreen(
                     }
                     TextButton(
                         onClick = {
-                            if (title.value.isEmpty()) {
+                            if (title.isEmpty()) {
                                 return@TextButton
                             }
-                            onEntryAdded(Pair(title.value, description.value))
+                            onEntryAdded(Triple(title, description, timeSpentDuration))
                         },
                         modifier = Modifier.padding(8.dp),
                     ) {
@@ -101,4 +132,33 @@ fun ModifyEntryScreen(
             }
         }
     }
+}
+
+fun parseDurationToSeconds(input: String): Long {
+    val regex = Regex("""(?:(\d+)d)?\s*(?:(\d+)h)?\s*(?:(\d+)m)?\s*(?:(\d+)s)?""")
+    val match = regex.matchEntire(input.trim())
+        ?: return -1 // Input invalid
+
+    val (d, h, m, s) = match.destructured
+
+    val days = d.toLongOrNull() ?: 0
+    val hours = h.toLongOrNull() ?: 0
+    val minutes = m.toLongOrNull() ?: 0
+    val seconds = s.toLongOrNull() ?: 0
+
+    return days * 86400 + hours * 3600 + minutes * 60 + seconds
+}
+
+fun formatDurationToString(seconds: Long): String {
+    val days = seconds / 86400
+    val hours = (seconds % 86400) / 3600
+    val minutes = (seconds % 3600) / 60
+    val secs = seconds % 60
+
+    return buildString {
+        if (days > 0) append("${days}d ")
+        if (hours > 0) append("${hours}h ")
+        if (minutes > 0) append("${minutes}m ")
+        if (secs > 0 || this.isEmpty()) append("${secs}s")
+    }.trim()
 }
