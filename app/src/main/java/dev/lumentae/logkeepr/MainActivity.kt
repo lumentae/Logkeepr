@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Insights
@@ -61,7 +60,6 @@ enum class Destination(
 ) {
     HOME("Home", Icons.Default.Dashboard),
     PROJECTS("Projects", Icons.Default.Folder),
-    LOG("Log", Icons.Default.AddCircleOutline, false),
     STATS("Stats", Icons.Default.Insights),
     SETTINGS("Settings", Icons.Default.Settings)
 }
@@ -82,7 +80,6 @@ fun AppNavHost(
                 when (destination) {
                     Destination.HOME -> HomeScreen(modifier, navController)
                     Destination.PROJECTS -> ProjectsScreen(modifier, navController)
-                    Destination.LOG -> LogScreen(modifier)
                     Destination.STATS -> StatsScreen(modifier)
                     Destination.SETTINGS -> SettingsScreen(modifier)
                 }
