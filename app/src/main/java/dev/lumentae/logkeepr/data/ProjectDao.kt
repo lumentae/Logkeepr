@@ -29,7 +29,7 @@ interface ProjectDao {
     fun getProjectTimeSpent(projectId: Long): Long
 
     @Query("SELECT p.* FROM project p INNER JOIN entries e ON p.id = e.project_id ORDER BY e.timestamp DESC LIMIT 1")
-    fun getLastChangedProject(): ProjectEntity
+    fun getLastChangedProject(): ProjectEntity?
 
     // Taq query methods
     @Query("SELECT * FROM tags")

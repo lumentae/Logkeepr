@@ -93,6 +93,7 @@ fun ProjectCard(
                     showEditTag = false
                     shouldRefresh.value = true
                     tagList = Globals.DATABASE.projectDao().getTagsForProject(project.id)
+                    Globals.DATABASE.streakDao().updateStreak()
                 }
             },
             editing = editingTag,

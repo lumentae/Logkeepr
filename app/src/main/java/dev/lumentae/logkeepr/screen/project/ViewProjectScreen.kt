@@ -75,6 +75,7 @@ fun ViewProjectScreen(
                 // Refresh projects list after adding a new project
                 projectDao.updateProject(project)
                 projectShouldRefresh.value = true
+                Globals.DATABASE.streakDao().updateStreak()
             },
             onCancel = {
                 showEditProjectDialog.value = false
@@ -115,6 +116,7 @@ fun ViewProjectScreen(
                         timeSpent = timeSpent
                     )
                     projectDao.insertEntry(entry)
+                    Globals.DATABASE.streakDao().updateStreak()
                 }
                 project.timeSpent = projectDao.getProjectTimeSpent(project.id)
                 projectDao.updateProject(project)
