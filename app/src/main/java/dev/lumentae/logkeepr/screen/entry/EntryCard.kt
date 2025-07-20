@@ -1,6 +1,8 @@
 package dev.lumentae.logkeepr.screen.entry
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,17 +25,24 @@ fun EntryCard(
         elevation = CardDefaults.cardElevation(),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(entry.title, style = MaterialTheme.typography.titleMedium)
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Column(
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Text(entry.title, style = MaterialTheme.typography.titleMedium)
 
-            if (entry.content.isNotEmpty()) {
-                Spacer(Modifier.height(8.dp))
+                if (entry.content.isNotEmpty()) {
+                    Spacer(Modifier.height(8.dp))
 
-                Text(
-                    entry.content,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                    Text(
+                        entry.content,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
             menu()
         }

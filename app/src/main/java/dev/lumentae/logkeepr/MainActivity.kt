@@ -43,6 +43,7 @@ class MainActivity : ComponentActivity() {
             AppDatabase::class.java, "logkeepr"
         )
             .allowMainThreadQueries()
+            .fallbackToDestructiveMigration(false)
             .build()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import dev.lumentae.logkeepr.Globals
 import dev.lumentae.logkeepr.data.entity.ProjectEntity
 import dev.lumentae.logkeepr.data.entity.TagEntity
+import dev.lumentae.logkeepr.screen.entry.formatDurationToString
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -129,6 +130,12 @@ fun ProjectCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(project.name, style = MaterialTheme.typography.titleMedium)
+            Spacer(Modifier.height(4.dp))
+            Text(
+                "⌚ ${formatDurationToString(project.timeSpent)}",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
 
             if (!project.description.isNullOrEmpty()) {
                 Spacer(Modifier.height(8.dp))

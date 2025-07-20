@@ -35,8 +35,10 @@ import dev.lumentae.logkeepr.screen.entry.EntryCard
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.ui.Alignment
 import dev.lumentae.logkeepr.data.entity.EntryEntity
 import dev.lumentae.logkeepr.screen.entry.ModifyEntryScreen
+import dev.lumentae.logkeepr.screen.entry.formatDurationToString
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,15 +90,18 @@ fun ViewProjectScreen(
     var editEntryId = remember { mutableLongStateOf(0) }
 
     if (showAddEntryDialog.value) {
+        var entryEntity = projectDao.getEntryById(editEntryId.longValue)
         ModifyEntryScreen(
             onEntryAdded = {
                 var title = it.first
                 var description = it.second
+                var timeSpent = it.third
 
                 if (editEntry.value) {
                     var entry = projectDao.getEntryById(editEntryId.longValue)!!
                     entry.title = title
                     entry.content = description
+                    entry.timeSpent = timeSpent
                     projectDao.updateEntry(entry)
                 } else {
                     val entry = EntryEntity(
@@ -104,10 +109,13 @@ fun ViewProjectScreen(
                         content = description,
                         projectId = project.id,
                         id = System.currentTimeMillis(),
-                        timestamp = System.currentTimeMillis()
+                        timestamp = System.currentTimeMillis(),
+                        timeSpent = timeSpent
                     )
                     projectDao.insertEntry(entry)
                 }
+                project.timeSpent = projectDao.getProjectTimeSpent(project.id)
+                projectDao.updateProject(project)
                 entries = projectDao.getEntriesForProject(project.id)
                 showAddEntryDialog.value = false
             },
@@ -116,14 +124,19 @@ fun ViewProjectScreen(
             },
             editing = editEntry.value,
             title = if (editEntry.value) {
-                projectDao.getEntryById(editEntryId.longValue)?.title ?: ""
+                entryEntity?.title ?: ""
             } else {
                 ""
             },
             description = if (editEntry.value) {
-                projectDao.getEntryById(editEntryId.longValue)?.content ?: ""
+                entryEntity?.content ?: ""
             } else {
                 ""
+            },
+            timeSpent = if (editEntry.value) {
+                entryEntity?.timeSpent?.let { formatDurationToString(it) } ?: "0"
+            } else {
+                "0"
             }
         )
     }
@@ -204,7 +217,8 @@ fun ViewProjectScreen(
                     EntryCard(entry = entry, menu = {
                         Box(
                             modifier = Modifier
-                                .padding(16.dp)
+                                .padding(16.dp),
+                            contentAlignment = Alignment.TopEnd
                         ) {
                             IconButton(onClick = { expanded = !expanded }) {
                                 Icon(Icons.Default.MoreVert, contentDescription = "More options")
@@ -229,6 +243,8 @@ fun ViewProjectScreen(
                                         // Refresh entries list after deletion
                                         entries = projectDao.getEntriesForProject(project.id)
                                         expanded = false
+                                        project.timeSpent = projectDao.getProjectTimeSpent(project.id)
+                                        projectDao.updateProject(project)
                                     }
                                 )
                             }
