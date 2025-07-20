@@ -1,6 +1,5 @@
 package dev.lumentae.logkeepr.screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,7 +28,6 @@ import androidx.navigation.NavController
 import dev.lumentae.logkeepr.Globals
 import dev.lumentae.logkeepr.screen.project.ProjectCard
 import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
-import java.util.logging.Logger
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +58,9 @@ fun HomeScreen(modifier: Modifier, navController: NavController) {
                     elevation = CardDefaults.cardElevation(),
                 ) {
                     Row(
-                        modifier = Modifier.padding(16.dp).fillMaxWidth(),
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column {
@@ -89,7 +89,11 @@ fun HomeScreen(modifier: Modifier, navController: NavController) {
                     elevation = CardDefaults.cardElevation(),
                 ) {
                     Text(
-                        "📂 ${projects.count()} projects\n📗 ${entries.count()} entries\n🕒 ${formatDurationToString(totalTime)} total time logged",
+                        "📂 ${projects.count()} projects\n📗 ${entries.count()} entries\n🕒 ${
+                            formatDurationToString(
+                                totalTime
+                            )
+                        } total time logged",
                         modifier = Modifier.padding(16.dp),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold

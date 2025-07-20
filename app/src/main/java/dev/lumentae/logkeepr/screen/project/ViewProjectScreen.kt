@@ -23,20 +23,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import dev.lumentae.logkeepr.Globals
+import dev.lumentae.logkeepr.data.entity.EntryEntity
 import dev.lumentae.logkeepr.data.entity.ProjectEntity
 import dev.lumentae.logkeepr.screen.project.entry.EntryCard
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.ui.Alignment
-import dev.lumentae.logkeepr.data.entity.EntryEntity
 import dev.lumentae.logkeepr.screen.project.entry.ModifyEntryScreen
 import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
 
@@ -184,9 +184,11 @@ fun ViewProjectScreen(
                             1 -> {
                                 "Are you sure?"
                             }
+
                             2 -> {
                                 "Really?"
                             }
+
                             else -> {
                                 "Delete"
                             }
@@ -248,7 +250,8 @@ fun ViewProjectScreen(
                                         // Refresh entries list after deletion
                                         entries = projectDao.getEntriesForProject(project.id)
                                         expanded = false
-                                        project.timeSpent = projectDao.getProjectTimeSpent(project.id)
+                                        project.timeSpent =
+                                            projectDao.getProjectTimeSpent(project.id)
                                         projectDao.updateProject(project)
                                     }
                                 )

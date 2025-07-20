@@ -31,7 +31,11 @@ import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProjectsScreen(modifier: Modifier, navController: NavController, createNewProject: Boolean = false) {
+fun ProjectsScreen(
+    modifier: Modifier,
+    navController: NavController,
+    createNewProject: Boolean = false
+) {
     var projectDao = Globals.DATABASE.projectDao()
     var projects = projectDao.getAllProjects()
 
