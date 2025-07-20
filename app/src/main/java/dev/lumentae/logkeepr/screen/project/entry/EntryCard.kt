@@ -26,7 +26,7 @@ fun EntryCard(
         elevation = CardDefaults.cardElevation(),
         modifier = Modifier.fillMaxWidth()
     ) {
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
