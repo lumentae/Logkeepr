@@ -1,4 +1,4 @@
-package dev.lumentae.logkeepr.screen.utils
+package dev.lumentae.logkeepr.screen.project.utils
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

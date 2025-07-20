@@ -18,10 +18,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -71,7 +70,8 @@ enum class Destination(
 fun AppNavHost(
     navController: NavHostController,
     startDestination: Destination,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    selectedDestination: MutableIntState
 ) {
     NavHost(
         navController,
@@ -80,13 +80,17 @@ fun AppNavHost(
         Destination.entries.forEach { destination ->
             composable(destination.route) {
                 when (destination) {
-                    Destination.HOME -> HomeScreen(modifier)
+                    Destination.HOME -> HomeScreen(modifier, navController)
                     Destination.PROJECTS -> ProjectsScreen(modifier, navController)
                     Destination.LOG -> LogScreen(modifier)
                     Destination.STATS -> StatsScreen(modifier)
                     Destination.SETTINGS -> SettingsScreen(modifier)
                 }
             }
+        }
+        composable("Projects/CreateNew") {
+            selectedDestination.intValue = Destination.PROJECTS.ordinal
+            ProjectsScreen(modifier, navController, createNewProject = true)
         }
         composable("ViewProject/{projectId}") { backStackEntry ->
             val projectId = backStackEntry.arguments?.getString("projectId")?.toLongOrNull()
@@ -104,7 +108,7 @@ fun AppNavHost(
 fun AppNavigationBar(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val startDestination = Destination.HOME
-    var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
+    var selectedDestination = rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
 
     Scaffold(
         modifier = modifier,
@@ -113,10 +117,10 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                 Destination.entries.forEachIndexed { index, destination ->
                     if (!destination.showInBottomBar) return@forEachIndexed
                     NavigationBarItem(
-                        selected = selectedDestination == index,
+                        selected = selectedDestination.intValue == index,
                         onClick = {
                             navController.navigate(route = destination.route)
-                            selectedDestination = index
+                            selectedDestination.intValue = index
                         },
                         icon = {
                             Icon(
@@ -130,6 +134,11 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
             }
         }
     ) { contentPadding ->
-        AppNavHost(navController, startDestination, modifier = Modifier.padding(contentPadding))
+        AppNavHost(
+            navController,
+            startDestination,
+            modifier = Modifier.padding(contentPadding),
+            selectedDestination = selectedDestination
+        )
     }
 }

@@ -31,14 +31,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import dev.lumentae.logkeepr.Globals
 import dev.lumentae.logkeepr.data.entity.ProjectEntity
-import dev.lumentae.logkeepr.screen.entry.EntryCard
+import dev.lumentae.logkeepr.screen.project.entry.EntryCard
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.ui.Alignment
 import dev.lumentae.logkeepr.data.entity.EntryEntity
-import dev.lumentae.logkeepr.screen.entry.ModifyEntryScreen
-import dev.lumentae.logkeepr.screen.entry.formatDurationToString
+import dev.lumentae.logkeepr.screen.project.entry.ModifyEntryScreen
+import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

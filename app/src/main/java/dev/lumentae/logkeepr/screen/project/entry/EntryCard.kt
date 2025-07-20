@@ -1,4 +1,4 @@
-package dev.lumentae.logkeepr.screen.entry
+package dev.lumentae.logkeepr.screen.project.entry
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.lumentae.logkeepr.data.entity.EntryEntity
+import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
 
 @Composable
 fun EntryCard(
@@ -33,7 +34,11 @@ fun EntryCard(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(entry.title, style = MaterialTheme.typography.titleMedium)
-
+                Text(
+                    "🕒 ${formatDurationToString(entry.timeSpent)}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
                 if (entry.content.isNotEmpty()) {
                     Spacer(Modifier.height(8.dp))
 

@@ -1,4 +1,4 @@
-package dev.lumentae.logkeepr.screen.tag
+package dev.lumentae.logkeepr.screen.project.entry
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,27 +19,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import dev.lumentae.logkeepr.screen.utils.ColorPicker
+import dev.lumentae.logkeepr.screen.project.utils.parseDurationToSeconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ModifyTagScreen(
-    onTagAdded: (Pair<String, String>) -> Unit,
+fun ModifyEntryScreen(
+    onEntryAdded: (Triple<String, String, Long>) -> Unit,
     onCancel: () -> Unit,
-    onDelete: () -> Unit,
     editing: Boolean = false,
     title: String = "",
-    color: String = "#",
+    description: String = "",
+    timeSpent: String = "",
 ) {
     var title by remember { mutableStateOf(title) }
-    val color = remember { mutableStateOf(color) }
-    val colorError = remember { mutableStateOf(false) }
+    var description by remember { mutableStateOf(description) }
+    var timeSpent by remember { mutableStateOf(timeSpent) }
+    var timeSpentError by remember { mutableStateOf(false) }
+    var timeSpentDuration by remember { mutableLongStateOf(0) }
 
     Dialog(onDismissRequest = { onCancel() }) {
         // Draw a rectangle shape with rounded corners inside the dialog
@@ -57,7 +60,7 @@ fun ModifyTagScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = if (editing) "Edit Tag" else "Add Tag",
+                    text = if (editing) "Edit Entry" else "Add Entry",
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(4.dp)
                 )
@@ -67,47 +70,64 @@ fun ModifyTagScreen(
                         title = it
                     },
                     isError = title.isEmpty(),
-                    label = { Text("Tag Name") },
+                    label = { Text("Entry Title") },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
                     singleLine = true,
                 )
-                ColorPicker(
-                    color = color,
-                    colorError = colorError
+                TextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text("Description") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
+                TextField(
+                    value = timeSpent,
+                    onValueChange = {
+                        timeSpentError = !Regex("^(?=.*\\d+[dhms])(?:(\\d+)d\\s*)?(?:(\\d+)h\\s*)?(?:(\\d+)m\\s*)?(?:(\\d+)s)?\$").matches(it)
+                        timeSpent = it
+                        if (!timeSpentError) {
+                            timeSpentDuration = parseDurationToSeconds(it) // Validate the input
+                        }
+                    },
+                    isError = timeSpentError,
+                    label = { Text("Time Spent (optional)") },
+                    supportingText = {
+                        if (timeSpentError) {
+                            Text("Invalid format. Use d, h, m, s (e.g., 1d 2h 30m 15s)")
+                        } else if (timeSpent.isNotEmpty()) {
+                            Text("Format: d (days), h (hours), m (minutes), s (seconds)")
+                        }
+                    },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
                 )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.End,
                 ) {
                     TextButton(
+                        onClick = { onCancel() },
+                        modifier = Modifier.padding(8.dp),
+                    ) {
+                        Text("Cancel")
+                    }
+                    TextButton(
                         onClick = {
-                            onDelete()
+                            if (title.isEmpty()) {
+                                return@TextButton
+                            }
+                            onEntryAdded(Triple(title, description, timeSpentDuration))
                         },
                         modifier = Modifier.padding(8.dp),
                     ) {
-                        Text("Delete", color = MaterialTheme.colorScheme.error)
-                    }
-                    Row() {
-                        TextButton(
-                            onClick = { onCancel() },
-                            modifier = Modifier.padding(8.dp),
-                        ) {
-                            Text("Cancel")
-                        }
-                        TextButton(
-                            onClick = {
-                                if (title.isEmpty()) {
-                                    return@TextButton
-                                }
-                                onTagAdded(Pair(title, color.value))
-                            },
-                            modifier = Modifier.padding(8.dp),
-                        ) {
-                            Text("Confirm")
-                        }
+                        Text("Confirm")
                     }
                 }
             }
