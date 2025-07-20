@@ -43,6 +43,7 @@ class MainActivity : ComponentActivity() {
             .allowMainThreadQueries()
             .fallbackToDestructiveMigration(false)
             .build()
+        Globals.DATABASE.streakDao().checkStreak()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {

@@ -33,11 +33,14 @@ import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
 @Composable
 fun HomeScreen(modifier: Modifier, navController: NavController) {
     var projectDao = Globals.DATABASE.projectDao()
+    var streakDao = Globals.DATABASE.streakDao()
+
     var lastProject = projectDao.getLastChangedProject()
-    var tags = projectDao.getTagsForProject(lastProject.id)
+    var tags = projectDao.getTagsForProject(lastProject?.id ?: -1)
     var projects = projectDao.getAllProjects()
     var entries = projectDao.getAllEntries()
     var totalTime = entries.sumOf { it.timeSpent }
+    var streakDays = streakDao.getAllStreaks().count() - 1 // Exclude the current streak day
 
     Scaffold(
         topBar = {
@@ -99,8 +102,29 @@ fun HomeScreen(modifier: Modifier, navController: NavController) {
                         fontWeight = FontWeight.Bold
                     )
                 }
+                if (streakDays > 0) {
+                    Spacer(Modifier.height(8.dp))
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(),
+                    ) {
+                        Text(
+                            "🔥 $streakDays days streak",
+                            modifier = Modifier.padding(16.dp),
+                            style = MaterialTheme.typography.headlineLarge,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             }
             item {
+                if (lastProject == null) {
+                    Text(
+                        "No projects found. Create a new project to get started!",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                    return@item
+                }
                 Text("Last Project", style = MaterialTheme.typography.headlineSmall)
                 Spacer(Modifier.height(8.dp))
                 ProjectCard(
