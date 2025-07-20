@@ -57,6 +57,7 @@ fun ViewProjectScreen(
     var tags by remember { mutableStateOf(projectDao.getTagsForProject(project.id)) }
     var entries by remember { mutableStateOf(projectDao.getEntriesForProject(project.id)) }
 
+    val projectShouldRefresh = remember { mutableStateOf(false) }
     val showEditProjectDialog = remember { mutableStateOf(false) }
 
     if (showEditProjectDialog.value) {
@@ -73,6 +74,7 @@ fun ViewProjectScreen(
                 showEditProjectDialog.value = false
                 // Refresh projects list after adding a new project
                 projectDao.updateProject(project)
+                projectShouldRefresh.value = true
             },
             onCancel = {
                 showEditProjectDialog.value = false
@@ -118,6 +120,7 @@ fun ViewProjectScreen(
                 projectDao.updateProject(project)
                 entries = projectDao.getEntriesForProject(project.id)
                 showAddEntryDialog.value = false
+                projectShouldRefresh.value = true
             },
             onCancel = {
                 showAddEntryDialog.value = false
@@ -169,6 +172,7 @@ fun ViewProjectScreen(
                     tags = tags,
                     showTagAddButton = true,
                     hasButtons = true,
+                    shouldRefresh = projectShouldRefresh,
                     onClick = {}
                 ) {
                     FlowRow(
@@ -204,6 +208,7 @@ fun ViewProjectScreen(
                         Button(
                             onClick = {
                                 showEditProjectDialog.value = true
+                                projectShouldRefresh.value = true
                             },
                         ) {
                             Text("Edit")

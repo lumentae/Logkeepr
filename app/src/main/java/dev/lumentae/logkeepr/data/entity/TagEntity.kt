@@ -6,9 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "tags")
 data class TagEntity(
-    @PrimaryKey val id: Long,
-    @ColumnInfo(name = "project_id") val projectId: Long,
-    @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "color") val color: String? = null,
-    @ColumnInfo(name = "icon") val icon: String? = null,
+    @PrimaryKey var id: Long,
+    @ColumnInfo(name = "project_id") var projectId: Long,
+    @ColumnInfo(name = "name") var name: String,
+    @ColumnInfo(name = "color") var color: String? = null
 )
