@@ -60,6 +60,13 @@ interface ProjectDao {
     @Query("SELECT * FROM entries WHERE project_id = :projectId")
     fun getEntriesForProject(projectId: Long): List<EntryEntity>
 
+    fun getEntriesByTimestampRange(
+        startTimestamp: Long,
+        endTimestamp: Long
+    ): List<EntryEntity> {
+        return getAllEntries().filter { it.timestamp in startTimestamp..endTimestamp }
+    }
+
     @Insert
     fun insertEntry(vararg entries: EntryEntity)
 
