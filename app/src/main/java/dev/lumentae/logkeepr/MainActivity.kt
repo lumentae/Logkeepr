@@ -32,6 +32,7 @@ import dev.lumentae.logkeepr.data.AppDatabase
 import dev.lumentae.logkeepr.screen.*
 import dev.lumentae.logkeepr.screen.project.ProjectsScreen
 import dev.lumentae.logkeepr.screen.project.ViewProjectScreen
+import dev.lumentae.logkeepr.screen.settings.SettingsScreen
 import dev.lumentae.logkeepr.ui.theme.LogkeeprTheme
 
 class MainActivity : ComponentActivity() {
