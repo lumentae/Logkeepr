@@ -1,4 +1,4 @@
-package dev.lumentae.logkeepr.screen.project
+package dev.lumentae.logkeepr.screen.project.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

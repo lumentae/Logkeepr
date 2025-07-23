@@ -40,7 +40,6 @@ androidx-material-icons-extended = { group = "androidx.compose.material", name =
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
-vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
 vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 
 [plugins]

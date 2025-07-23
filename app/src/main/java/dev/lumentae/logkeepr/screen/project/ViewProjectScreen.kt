@@ -36,6 +36,7 @@ import androidx.navigation.NavController
 import dev.lumentae.logkeepr.Globals
 import dev.lumentae.logkeepr.data.entity.EntryEntity
 import dev.lumentae.logkeepr.data.entity.ProjectEntity
+import dev.lumentae.logkeepr.screen.project.components.ProjectCard
 import dev.lumentae.logkeepr.screen.project.entry.EntryCard
 import dev.lumentae.logkeepr.screen.project.entry.ModifyEntryScreen
 import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString

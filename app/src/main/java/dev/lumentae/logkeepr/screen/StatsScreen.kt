@@ -1,16 +1,11 @@
 package dev.lumentae.logkeepr.screen
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -30,6 +25,7 @@ import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.common.Position
 import dev.lumentae.logkeepr.Globals
+import dev.lumentae.logkeepr.screen.components.DefaultPageTemplate
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -63,57 +59,42 @@ fun StatsScreen(modifier: Modifier) {
     val formatter = DateTimeFormatter.ofPattern("EEE")
     val xLabels = days.map { it.format(formatter) }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("Home") })
-        },
-        modifier = modifier
-    ) { padding ->
-        LazyColumn(
-            contentPadding = padding,
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxSize()
+    DefaultPageTemplate("Stats", modifier) {
+        Card(
+            modifier = Modifier.fillMaxSize(),
+            elevation = CardDefaults.cardElevation(),
         ) {
-            item {
-                Card(
-                    modifier = Modifier.fillMaxSize(),
-                    elevation = CardDefaults.cardElevation(),
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(8.dp)
-                    ) {
-                        LaunchedEffect(Unit) {
-                            modelProducer.runTransaction {
-                                lineSeries {
-                                    val x = (0..6).map { it.toFloat() }
-                                    val y = entriesPerDay.map { it.toFloat() }
-                                    series(x, y)
-                                }
-                            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+            ) {
+                LaunchedEffect(Unit) {
+                    modelProducer.runTransaction {
+                        lineSeries {
+                            val x = (0..6).map { it.toFloat() }
+                            val y = entriesPerDay.map { it.toFloat() }
+                            series(x, y)
                         }
-                        CartesianChartHost(
-                            rememberCartesianChart(
-                                rememberLineCartesianLayer(),
-                                startAxis = VerticalAxis.rememberStart(
-                                    itemPlacer = remember {
-                                        SingularItemPlacer()
-                                    }
-                                ),
-                                bottomAxis = HorizontalAxis.rememberBottom(
-                                    valueFormatter = { _, value, _ ->
-                                        xLabels.getOrNull(value.toInt()) ?: ""
-                                    }
-                                ),
-
-                                ),
-                            modelProducer,
-                        )
                     }
                 }
+                CartesianChartHost(
+                    rememberCartesianChart(
+                        rememberLineCartesianLayer(),
+                        startAxis = VerticalAxis.rememberStart(
+                            itemPlacer = remember {
+                                SingularItemPlacer()
+                            }
+                        ),
+                        bottomAxis = HorizontalAxis.rememberBottom(
+                            valueFormatter = { _, value, _ ->
+                                xLabels.getOrNull(value.toInt()) ?: ""
+                            }
+                        ),
+
+                        ),
+                    modelProducer,
+                )
             }
         }
     }
