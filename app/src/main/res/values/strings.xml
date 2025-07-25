@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">Logkeepr</string>
-    <string name="config.useDarkMode">Use dynamic colors</string>
+    <string name="config_entry_useDarkMode">Dark Mode</string>
+    <string name="config_section_theme">Theme</string>
 </resources>

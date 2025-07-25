@@ -27,6 +27,7 @@ import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
 import dev.lumentae.logkeepr.data.database.entity.TagEntity
 import dev.lumentae.logkeepr.screen.project.tag.ModifyTagScreen
+import dev.lumentae.logkeepr.screen.project.utils.bestTextColor
 import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
 
 @Composable
@@ -109,6 +110,14 @@ fun ProjectCard(
         )
     }
 
+    val containerColor = try {
+        Color(android.graphics.Color.parseColor(project.color))
+    } catch (_: Exception) {
+        Color.Unspecified
+    }
+
+    val textColor = bestTextColor(containerColor)
+
     Card(
         elevation = CardDefaults.cardElevation(),
         modifier = Modifier
@@ -116,20 +125,16 @@ fun ProjectCard(
             .padding(bottom = 16.dp),
         onClick = onClick,
         colors = CardDefaults.cardColors(
-            containerColor = try {
-                Color(android.graphics.Color.parseColor(project.color))
-            } catch (_: Exception) {
-                Color.Unspecified
-            }
+            containerColor = containerColor,
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(project.name, style = MaterialTheme.typography.titleMedium)
+            Text(project.name, style = MaterialTheme.typography.titleMedium, color = textColor)
             Spacer(Modifier.height(4.dp))
             Text(
                 "🕒 ${formatDurationToString(project.timeSpent)}",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = textColor
             )
 
             if (!project.description.isNullOrEmpty()) {
@@ -138,7 +143,7 @@ fun ProjectCard(
                 Text(
                     project.description!!,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = textColor
                 )
             }
 
@@ -150,6 +155,11 @@ fun ProjectCard(
                     .fillMaxWidth()
             ) {
                 tagList.forEach {
+                    val tagColor = try {
+                        Color(android.graphics.Color.parseColor(it.color))
+                    } catch (_: Exception) {
+                        MaterialTheme.colorScheme.surfaceVariant
+                    }
                     AssistChip(
                         onClick = {
                             showEditTag = true
@@ -157,14 +167,10 @@ fun ProjectCard(
                             tagToEdit = it
                         },
                         label = {
-                            Text(it.name)
+                            Text(it.name, color = bestTextColor(tagColor))
                         },
                         colors = AssistChipDefaults.assistChipColors(
-                            containerColor = try {
-                                Color(android.graphics.Color.parseColor(it.color))
-                            } catch (_: Exception) {
-                                MaterialTheme.colorScheme.surfaceVariant
-                            },
+                            containerColor = tagColor
                         ),
                         modifier = Modifier
                             .height(24.dp)

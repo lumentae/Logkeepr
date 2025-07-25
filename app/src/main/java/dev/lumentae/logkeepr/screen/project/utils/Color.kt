@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -15,6 +16,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import kotlin.math.pow
 
 @Composable
 fun ColorPicker(
@@ -58,4 +60,34 @@ fun ColorPicker(
             singleLine = true,
         )
     }
+}
+
+fun contrastRatio(color1: Color, color2: Color): Double {
+    fun luminance(c: Color): Double {
+        fun channel(v: Float): Double {
+            val d = v.toDouble()
+            return if (d <= 0.03928) d / 12.92 else ((d + 0.055) / 1.055).pow(2.4)
+        }
+
+        val r = channel(color1.red)
+        val g = channel(color1.green)
+        val b = channel(color1.blue)
+
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b
+    }
+
+    val lum1 = luminance(color1) + 0.05
+    val lum2 = luminance(color2) + 0.05
+
+    return if (lum1 > lum2) lum1 / lum2 else lum2 / lum1
+}
+
+@Composable
+fun bestTextColor(background: Color): Color {
+    val whiteContrast = contrastRatio(background, Color.White)
+    val blackContrast = contrastRatio(background, Color.Black)
+    return if (whiteContrast >= blackContrast)
+        MaterialTheme.colorScheme.onSurfaceVariant
+    else
+        MaterialTheme.colorScheme.inverseOnSurface
 }

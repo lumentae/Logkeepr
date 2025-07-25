@@ -100,6 +100,7 @@ fun HomeScreen(modifier: Modifier, navController: NavController) {
                 )
             }
         }
+        Spacer(Modifier.height(16.dp))
         if (lastProject == null) {
             Text(
                 "No projects found. Create a new project to get started!",
@@ -107,7 +108,11 @@ fun HomeScreen(modifier: Modifier, navController: NavController) {
             )
             return@DefaultPageTemplate
         }
-        Text("Last Project", style = MaterialTheme.typography.headlineSmall)
+        Text(
+            "Last Project",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Bold
+        )
         Spacer(Modifier.height(8.dp))
         ProjectCard(
             project = lastProject,
