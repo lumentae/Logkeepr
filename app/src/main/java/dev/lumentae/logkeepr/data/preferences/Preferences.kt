@@ -23,7 +23,7 @@ object Preferences {
         )
     }
 
-    object Entries {
+    object Keys {
         val useDarkMode = PreferenceKey(
             booleanPreferencesKey("useDarkMode"), mutableStateOf(false),
             R.string.config_entry_useDarkMode
