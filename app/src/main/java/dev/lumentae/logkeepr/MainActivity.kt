@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val darkTheme = PreferenceManager.getPreference(this, Preferences.Entries.useDarkMode)
+            val darkTheme = PreferenceManager.getPreference(this, Preferences.Keys.useDarkMode)
             LogkeeprTheme(
                 darkTheme = darkTheme.value
             ) {

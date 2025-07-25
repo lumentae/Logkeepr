@@ -12,7 +12,7 @@ import dev.lumentae.logkeepr.screen.settings.preference.PreferenceSection
 fun SettingsScreen(modifier: Modifier) {
     DefaultPageTemplate("Settings", modifier) {
         PreferenceSection(Preferences.Sections.theme) {
-            Preference(Preferences.Entries.useDarkMode)
+            Preference(Preferences.Keys.useDarkMode)
         }
     }
 }
