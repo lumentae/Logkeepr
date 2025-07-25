@@ -22,7 +22,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getString
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -64,14 +66,14 @@ class MainActivity : ComponentActivity() {
 }
 
 enum class Destination(
-    val route: String,
+    val route: Int,
     val icon: ImageVector,
     val showInBottomBar: Boolean = true
 ) {
-    HOME("Home", Icons.Default.Dashboard),
-    PROJECTS("Projects", Icons.Default.Folder),
-    STATS("Stats", Icons.Default.Insights),
-    SETTINGS("Settings", Icons.Default.Settings)
+    HOME(R.string.route_home, Icons.Default.Dashboard),
+    PROJECTS(R.string.route_projects, Icons.Default.Folder),
+    STATS(R.string.route_stats, Icons.Default.Insights),
+    SETTINGS(R.string.route_settings, Icons.Default.Settings)
 }
 
 @Composable
@@ -81,12 +83,13 @@ fun AppNavHost(
     modifier: Modifier = Modifier,
     selectedDestination: MutableIntState
 ) {
+    val context = LocalContext.current
     NavHost(
         navController,
-        startDestination = startDestination.route
+        startDestination = getString(context, startDestination.route)
     ) {
         Destination.entries.forEach { destination ->
-            composable(destination.route) {
+            composable(getString(context, destination.route)) {
                 when (destination) {
                     Destination.HOME -> HomeScreen(modifier, navController)
                     Destination.PROJECTS -> ProjectsScreen(modifier, navController)
@@ -106,7 +109,10 @@ fun AppNavHost(
                 val project = DatabaseManager.getProjectById(projectId)
                 ViewProjectScreen(modifier, project, navController)
             } else {
-                Text("Project not found", modifier = Modifier.padding(16.dp))
+                Text(
+                    getString(context, R.string.project_not_found),
+                    modifier = Modifier.padding(16.dp)
+                )
             }
         }
     }
@@ -118,6 +124,8 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
     val startDestination = Destination.HOME
     var selectedDestination = rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
 
+    val context = LocalContext.current
+
     Scaffold(
         modifier = modifier,
         bottomBar = {
@@ -127,16 +135,19 @@ fun AppNavigationBar(modifier: Modifier = Modifier) {
                     NavigationBarItem(
                         selected = selectedDestination.intValue == index,
                         onClick = {
-                            navController.navigate(route = destination.route)
+                            navController.navigate(route = getString(context, destination.route))
                             selectedDestination.intValue = index
                         },
                         icon = {
                             Icon(
                                 destination.icon,
-                                contentDescription = destination.route
+                                contentDescription = getString(
+                                    LocalContext.current,
+                                    destination.route
+                                )
                             )
                         },
-                        label = { Text(destination.route) }
+                        label = { Text(getString(LocalContext.current, destination.route)) }
                     )
                 }
             }

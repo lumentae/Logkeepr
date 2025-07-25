@@ -11,7 +11,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getString
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberBottom
 import com.patrykandpatrick.vico.compose.cartesian.axis.rememberStart
@@ -25,6 +27,7 @@ import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.common.Position
+import dev.lumentae.logkeepr.R
 import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.screen.components.DefaultPageTemplate
 import java.time.Instant
@@ -59,7 +62,7 @@ fun StatsScreen(modifier: Modifier) {
     val formatter = DateTimeFormatter.ofPattern("EEE")
     val xLabels = days.map { it.format(formatter) }
 
-    DefaultPageTemplate("Stats", modifier) {
+    DefaultPageTemplate(getString(LocalContext.current, R.string.stats), modifier) {
         Card(
             modifier = Modifier.fillMaxSize(),
             elevation = CardDefaults.cardElevation(),

@@ -15,7 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getString
+import dev.lumentae.logkeepr.R
 import kotlin.math.pow
 
 @Composable
@@ -53,7 +56,7 @@ fun ColorPicker(
                     !Regex("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$").matches(it)
             },
             isError = !Regex("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$").matches(color.value),
-            label = { Text("Color (Hex)") },
+            label = { Text(getString(LocalContext.current, R.string.color_hex)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),

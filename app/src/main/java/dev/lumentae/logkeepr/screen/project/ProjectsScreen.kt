@@ -10,8 +10,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getString
 import androidx.navigation.NavController
+import dev.lumentae.logkeepr.R
 import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
 import dev.lumentae.logkeepr.screen.components.DefaultPageTemplate
@@ -60,7 +63,10 @@ fun ProjectsScreen(
             FloatingActionButton(onClick = {
                 shouldShowDialog.value = true
             }) {
-                Icon(Icons.Default.Add, contentDescription = "Add Project")
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = getString(LocalContext.current, R.string.add_project)
+                )
             }
         }
     )
@@ -78,7 +84,7 @@ fun ProjectsScreen(
                 elevation = CardDefaults.cardElevation(4.dp)
             ) {
                 Text(
-                    "No projects found. Click the '+' button to add a new project.",
+                    getString(LocalContext.current, R.string.no_projects),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(16.dp)
                 )

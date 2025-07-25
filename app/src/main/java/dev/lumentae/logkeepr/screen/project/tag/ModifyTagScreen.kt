@@ -22,9 +22,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.content.ContextCompat.getString
+import dev.lumentae.logkeepr.R
 import dev.lumentae.logkeepr.screen.project.utils.ColorPicker
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +60,10 @@ fun ModifyTagScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = if (editing) "Edit Tag" else "Add Tag",
+                    text = if (editing) getString(
+                        LocalContext.current,
+                        R.string.edit_tag
+                    ) else getString(LocalContext.current, R.string.add_tag),
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(4.dp)
                 )
@@ -67,7 +73,7 @@ fun ModifyTagScreen(
                         title = it
                     },
                     isError = title.isEmpty(),
-                    label = { Text("Tag Name") },
+                    label = { Text(getString(LocalContext.current, R.string.tag_name)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
@@ -88,14 +94,17 @@ fun ModifyTagScreen(
                         },
                         modifier = Modifier.padding(8.dp),
                     ) {
-                        Text("Delete", color = MaterialTheme.colorScheme.error)
+                        Text(
+                            getString(LocalContext.current, R.string.delete),
+                            color = MaterialTheme.colorScheme.error
+                        )
                     }
                     Row {
                         TextButton(
                             onClick = { onCancel() },
                             modifier = Modifier.padding(8.dp),
                         ) {
-                            Text("Cancel")
+                            Text(getString(LocalContext.current, R.string.cancel))
                         }
                         TextButton(
                             onClick = {
@@ -106,7 +115,7 @@ fun ModifyTagScreen(
                             },
                             modifier = Modifier.padding(8.dp),
                         ) {
-                            Text("Confirm")
+                            Text(getString(LocalContext.current, R.string.confirm))
                         }
                     }
                 }

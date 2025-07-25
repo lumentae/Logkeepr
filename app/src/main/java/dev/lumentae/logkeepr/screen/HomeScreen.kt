@@ -19,9 +19,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getString
 import androidx.navigation.NavController
+import dev.lumentae.logkeepr.R
 import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.screen.components.DefaultPageTemplate
 import dev.lumentae.logkeepr.screen.project.components.ProjectCard
@@ -39,6 +42,9 @@ fun HomeScreen(modifier: Modifier, navController: NavController) {
     var streakDays = DatabaseManager.getAllStreaks()
         .collectAsState().value.count() - 1 // Exclude the current streak day
 
+    val context = LocalContext.current
+    val resources = context.resources
+
     DefaultPageTemplate("Home", modifier) {
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -52,13 +58,13 @@ fun HomeScreen(modifier: Modifier, navController: NavController) {
             ) {
                 Column {
                     Text(
-                        "Welcome to LogKeepr!",
+                        getString(LocalContext.current, R.string.home_welcome),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        "Nice to see you again!",
+                        getString(LocalContext.current, R.string.home_nice_to_see_you),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -66,7 +72,10 @@ fun HomeScreen(modifier: Modifier, navController: NavController) {
                     onClick = { navController.navigate("Projects/CreateNew") },
                     modifier = Modifier.padding(start = 4.dp)
                 ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add Project")
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = getString(LocalContext.current, R.string.add_project)
+                    )
                 }
             }
         }
@@ -76,11 +85,24 @@ fun HomeScreen(modifier: Modifier, navController: NavController) {
             elevation = CardDefaults.cardElevation(),
         ) {
             Text(
-                "📂 ${projects.value.count()} projects\n📗 ${entries.value.count()} entries\n🕒 ${
-                    formatDurationToString(
-                        totalTime
+                "${
+                    resources.getQuantityString(
+                        R.plurals.home_stats_projects,
+                        projects.value.count(),
+                        projects.value.count()
                     )
-                } total time logged",
+                }\n" +
+                        "${
+                            resources.getQuantityString(
+                                R.plurals.home_stats_entries,
+                                entries.value.count(),
+                                entries.value.count()
+                            )
+                        }\n" +
+                        context.getString(
+                            R.string.home_stats_time,
+                            formatDurationToString(totalTime)
+                        ),
                 modifier = Modifier.padding(16.dp),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold
@@ -93,7 +115,7 @@ fun HomeScreen(modifier: Modifier, navController: NavController) {
                 elevation = CardDefaults.cardElevation(),
             ) {
                 Text(
-                    "🔥 $streakDays days streak",
+                    resources.getQuantityString(R.plurals.home_streak, streakDays, streakDays),
                     modifier = Modifier.padding(16.dp),
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold
@@ -103,13 +125,13 @@ fun HomeScreen(modifier: Modifier, navController: NavController) {
         Spacer(Modifier.height(16.dp))
         if (lastProject == null) {
             Text(
-                "No projects found. Create a new project to get started!",
+                getString(LocalContext.current, R.string.no_projects),
                 style = MaterialTheme.typography.bodyMedium
             )
             return@DefaultPageTemplate
         }
         Text(
-            "Last Project",
+            getString(LocalContext.current, R.string.home_last_project),
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold
         )
