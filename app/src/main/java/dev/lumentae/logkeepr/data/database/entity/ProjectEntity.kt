@@ -1,4 +1,4 @@
-package dev.lumentae.logkeepr.data.entity
+package dev.lumentae.logkeepr.data.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

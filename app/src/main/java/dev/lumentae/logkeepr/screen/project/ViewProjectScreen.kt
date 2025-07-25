@@ -16,6 +16,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,8 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import dev.lumentae.logkeepr.Globals
-import dev.lumentae.logkeepr.data.entity.EntryEntity
-import dev.lumentae.logkeepr.data.entity.ProjectEntity
+import dev.lumentae.logkeepr.data.database.entity.EntryEntity
+import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
 import dev.lumentae.logkeepr.screen.project.components.ProjectCard
 import dev.lumentae.logkeepr.screen.project.entry.EntryCard
 import dev.lumentae.logkeepr.screen.project.entry.ModifyEntryScreen
@@ -220,6 +221,12 @@ fun ViewProjectScreen(
                         }
                     }
                 }
+            }
+            item {
+                HorizontalDivider(
+                    modifier = Modifier.padding(bottom = 4.dp),
+                    thickness = 1.dp
+                )
             }
             entries.forEach { entry ->
                 item(key = entry.id) {
