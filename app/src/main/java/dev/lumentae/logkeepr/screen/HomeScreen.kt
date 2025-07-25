@@ -17,11 +17,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import dev.lumentae.logkeepr.Globals
+import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.screen.components.DefaultPageTemplate
 import dev.lumentae.logkeepr.screen.project.components.ProjectCard
 import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
@@ -29,15 +30,14 @@ import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(modifier: Modifier, navController: NavController) {
-    var projectDao = Globals.DATABASE.projectDao()
-    var streakDao = Globals.DATABASE.streakDao()
 
-    var lastProject = projectDao.getLastChangedProject()
-    var tags = projectDao.getTagsForProject(lastProject?.id ?: -1)
-    var projects = projectDao.getAllProjects()
-    var entries = projectDao.getAllEntries()
-    var totalTime = entries.sumOf { it.timeSpent }
-    var streakDays = streakDao.getAllStreaks().count() - 1 // Exclude the current streak day
+    var lastProject = DatabaseManager.getLastChangedProject()
+    var tags = DatabaseManager.getTagsForProject(lastProject?.id ?: -1)
+    var projects = DatabaseManager.getAllProjects().collectAsState()
+    var entries = DatabaseManager.getAllEntries().collectAsState()
+    var totalTime = entries.value.sumOf { it.timeSpent }
+    var streakDays = DatabaseManager.getAllStreaks()
+        .collectAsState().value.count() - 1 // Exclude the current streak day
 
     DefaultPageTemplate("Home", modifier) {
         Card(
@@ -76,7 +76,7 @@ fun HomeScreen(modifier: Modifier, navController: NavController) {
             elevation = CardDefaults.cardElevation(),
         ) {
             Text(
-                "📂 ${projects.count()} projects\n📗 ${entries.count()} entries\n🕒 ${
+                "📂 ${projects.value.count()} projects\n📗 ${entries.value.count()} entries\n🕒 ${
                     formatDurationToString(
                         totalTime
                     )

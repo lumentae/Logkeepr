@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -34,7 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import dev.lumentae.logkeepr.Globals
+import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.data.database.entity.EntryEntity
 import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
 import dev.lumentae.logkeepr.screen.project.components.ProjectCard
@@ -53,11 +54,10 @@ fun ViewProjectScreen(
         return
     }
 
-    val projectDao = Globals.DATABASE.projectDao()
-    var projects = projectDao.getAllProjects()
+    var projects = DatabaseManager.getAllProjects().collectAsState()
 
-    var tags by remember { mutableStateOf(projectDao.getTagsForProject(project.id)) }
-    var entries by remember { mutableStateOf(projectDao.getEntriesForProject(project.id)) }
+    var tags by remember { mutableStateOf(DatabaseManager.getTagsForProject(project.id)) }
+    var entries by remember { mutableStateOf(DatabaseManager.getEntriesForProject(project.id)) }
 
     val projectShouldRefresh = remember { mutableStateOf(false) }
     val showEditProjectDialog = remember { mutableStateOf(false) }
@@ -75,14 +75,14 @@ fun ViewProjectScreen(
 
                 showEditProjectDialog.value = false
                 // Refresh projects list after adding a new project
-                projectDao.updateProject(project)
+                DatabaseManager.updateProject(project)
                 projectShouldRefresh.value = true
-                Globals.DATABASE.streakDao().updateStreak()
+                DatabaseManager.updateStreak()
             },
             onCancel = {
                 showEditProjectDialog.value = false
             },
-            projects = projects,
+            projects = projects.value,
             editing = true,
             name = project.name,
             description = project.description ?: "",
@@ -95,7 +95,7 @@ fun ViewProjectScreen(
     var editEntryId = remember { mutableLongStateOf(0) }
 
     if (showAddEntryDialog.value) {
-        var entryEntity = projectDao.getEntryById(editEntryId.longValue)
+        var entryEntity = DatabaseManager.getEntryById(editEntryId.longValue)
         ModifyEntryScreen(
             onEntryAdded = {
                 var title = it.first
@@ -103,11 +103,11 @@ fun ViewProjectScreen(
                 var timeSpent = it.third
 
                 if (editEntry.value) {
-                    var entry = projectDao.getEntryById(editEntryId.longValue)!!
+                    var entry = DatabaseManager.getEntryById(editEntryId.longValue)!!
                     entry.title = title
                     entry.content = description
                     entry.timeSpent = timeSpent
-                    projectDao.updateEntry(entry)
+                    DatabaseManager.updateEntry(entry)
                 } else {
                     val entry = EntryEntity(
                         title = title,
@@ -117,12 +117,12 @@ fun ViewProjectScreen(
                         timestamp = System.currentTimeMillis(),
                         timeSpent = timeSpent
                     )
-                    projectDao.insertEntry(entry)
-                    Globals.DATABASE.streakDao().updateStreak()
+                    DatabaseManager.insertEntry(entry)
+                    DatabaseManager.updateStreak()
                 }
-                project.timeSpent = projectDao.getProjectTimeSpent(project.id)
-                projectDao.updateProject(project)
-                entries = projectDao.getEntriesForProject(project.id)
+                project.timeSpent = DatabaseManager.getProjectTimeSpent(project.id)
+                DatabaseManager.updateProject(project)
+                entries = DatabaseManager.getEntriesForProject(project.id)
                 showAddEntryDialog.value = false
                 projectShouldRefresh.value = true
             },
@@ -202,7 +202,7 @@ fun ViewProjectScreen(
                                 if (deletePressed.intValue < 2) {
                                     deletePressed.intValue++
                                 } else {
-                                    projectDao.deleteProject(project)
+                                    DatabaseManager.deleteProject(project)
                                     deletePressed.intValue = 0
                                     navController.navigateUp()
                                 }
@@ -256,13 +256,13 @@ fun ViewProjectScreen(
                                 DropdownMenuItem(
                                     text = { Text("Delete") },
                                     onClick = {
-                                        projectDao.deleteEntry(entry)
+                                        DatabaseManager.deleteEntry(entry)
                                         // Refresh entries list after deletion
-                                        entries = projectDao.getEntriesForProject(project.id)
+                                        entries = DatabaseManager.getEntriesForProject(project.id)
                                         expanded = false
                                         project.timeSpent =
-                                            projectDao.getProjectTimeSpent(project.id)
-                                        projectDao.updateProject(project)
+                                            DatabaseManager.getProjectTimeSpent(project.id)
+                                        DatabaseManager.updateProject(project)
                                     }
                                 )
                             }
