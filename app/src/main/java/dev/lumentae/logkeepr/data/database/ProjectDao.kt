@@ -1,11 +1,13 @@
-package dev.lumentae.logkeepr.data
+package dev.lumentae.logkeepr.data.database
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import dev.lumentae.logkeepr.data.entity.*
+import dev.lumentae.logkeepr.data.database.entity.EntryEntity
+import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
+import dev.lumentae.logkeepr.data.database.entity.TagEntity
 
 @Dao
 interface ProjectDao {
@@ -59,13 +61,6 @@ interface ProjectDao {
 
     @Query("SELECT * FROM entries WHERE project_id = :projectId")
     fun getEntriesForProject(projectId: Long): List<EntryEntity>
-
-    fun getEntriesByTimestampRange(
-        startTimestamp: Long,
-        endTimestamp: Long
-    ): List<EntryEntity> {
-        return getAllEntries().filter { it.timestamp in startTimestamp..endTimestamp }
-    }
 
     @Insert
     fun insertEntry(vararg entries: EntryEntity)

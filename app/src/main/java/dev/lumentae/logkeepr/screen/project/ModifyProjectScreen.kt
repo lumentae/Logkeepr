@@ -27,7 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import dev.lumentae.logkeepr.data.entity.ProjectEntity
+import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
 
 @Composable
 fun ModifyProjectScreen(

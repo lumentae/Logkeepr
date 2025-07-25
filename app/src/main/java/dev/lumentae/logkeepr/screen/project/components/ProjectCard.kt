@@ -24,8 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.lumentae.logkeepr.Globals
-import dev.lumentae.logkeepr.data.entity.ProjectEntity
-import dev.lumentae.logkeepr.data.entity.TagEntity
+import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
+import dev.lumentae.logkeepr.data.database.entity.TagEntity
 import dev.lumentae.logkeepr.screen.project.tag.ModifyTagScreen
 import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
 
@@ -48,6 +48,8 @@ fun ProjectCard(
     var editingTag by remember { mutableStateOf(false) }
     var tagToEdit by remember { mutableStateOf<TagEntity?>(null) }
 
+    val projectDao = Globals.DATABASE.projectDao()
+
     if (showEditTag) {
         ModifyTagScreen(
             onTagAdded = {
@@ -60,12 +62,12 @@ fun ProjectCard(
                     // Update existing tag
                     tagToEdit?.name = tagName
                     tagToEdit?.color = tagColor
-                    Globals.DATABASE.projectDao().updateTag(
+                    projectDao.updateTag(
                         tagToEdit!!
                     )
                 } else {
                     // Insert new tag
-                    Globals.DATABASE.projectDao().insertTag(
+                    projectDao.insertTag(
                         TagEntity(
                             name = tagName,
                             color = tagColor,
@@ -78,7 +80,7 @@ fun ProjectCard(
                 editingTag = false
                 tagToEdit = null
                 shouldRefresh.value = true
-                tagList = Globals.DATABASE.projectDao().getTagsForProject(project.id)
+                tagList = projectDao.getTagsForProject(project.id)
             },
             onCancel = {
                 editingTag = false
@@ -87,13 +89,12 @@ fun ProjectCard(
             },
             onDelete = {
                 if (editingTag && tagToEdit != null) {
-                    Globals.DATABASE.projectDao().deleteTag(tagToEdit!!)
+                    projectDao.deleteTag(tagToEdit!!)
                     editingTag = false
                     tagToEdit = null
                     showEditTag = false
                     shouldRefresh.value = true
-                    tagList = Globals.DATABASE.projectDao().getTagsForProject(project.id)
-                    Globals.DATABASE.streakDao().updateStreak()
+                    tagList = projectDao.getTagsForProject(project.id)
                 }
             },
             editing = editingTag,
@@ -112,7 +113,9 @@ fun ProjectCard(
 
     Card(
         elevation = CardDefaults.cardElevation(),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
         onClick = onClick,
         colors = CardDefaults.cardColors(
             containerColor = try {

@@ -58,6 +58,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)
 
     implementation(libs.vico.compose.m3)
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.preferences)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -1,9 +1,9 @@
-package dev.lumentae.logkeepr.data
+package dev.lumentae.logkeepr.data.database
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import dev.lumentae.logkeepr.data.entity.*
+import dev.lumentae.logkeepr.data.database.entity.StreakEntity
 import java.time.Instant
 import java.time.ZoneOffset
 
