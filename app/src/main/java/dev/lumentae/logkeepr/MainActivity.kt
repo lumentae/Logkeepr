@@ -28,7 +28,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
-import dev.lumentae.logkeepr.data.AppDatabase
+import dev.lumentae.logkeepr.data.database.AppDatabase
+import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.screen.*
 import dev.lumentae.logkeepr.screen.project.ProjectsScreen
 import dev.lumentae.logkeepr.screen.project.ViewProjectScreen
@@ -42,9 +43,11 @@ class MainActivity : ComponentActivity() {
             AppDatabase::class.java, "logkeepr"
         )
             .allowMainThreadQueries()
-            .fallbackToDestructiveMigration(false)
             .build()
-        Globals.DATABASE.streakDao().checkStreak()
+
+        DatabaseManager.loadDatabase()
+        DatabaseManager.checkStreak()
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -92,9 +95,10 @@ fun AppNavHost(
             ProjectsScreen(modifier, navController, createNewProject = true)
         }
         composable("ViewProject/{projectId}") { backStackEntry ->
+            selectedDestination.intValue = Destination.PROJECTS.ordinal
             val projectId = backStackEntry.arguments?.getString("projectId")?.toLongOrNull()
             if (projectId != null) {
-                val project = Globals.DATABASE.projectDao().getProjectById(projectId)
+                val project = DatabaseManager.getProjectById(projectId)
                 ViewProjectScreen(modifier, project, navController)
             } else {
                 Text("Project not found", modifier = Modifier.padding(16.dp))

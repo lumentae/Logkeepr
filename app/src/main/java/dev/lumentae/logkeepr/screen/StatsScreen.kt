@@ -8,6 +8,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -24,7 +25,7 @@ import com.patrykandpatrick.vico.core.cartesian.axis.VerticalAxis
 import com.patrykandpatrick.vico.core.cartesian.data.CartesianChartModelProducer
 import com.patrykandpatrick.vico.core.cartesian.data.lineSeries
 import com.patrykandpatrick.vico.core.common.Position
-import dev.lumentae.logkeepr.Globals
+import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.screen.components.DefaultPageTemplate
 import java.time.Instant
 import java.time.ZoneId
@@ -34,8 +35,7 @@ import kotlin.math.max
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatsScreen(modifier: Modifier) {
-    var projectDao = Globals.DATABASE.projectDao()
-    var entries = projectDao.getAllEntries()
+    var entries = DatabaseManager.getAllEntries().collectAsState()
 
     val now = System.currentTimeMillis()
     val days = List(7) { offset ->
@@ -48,7 +48,7 @@ fun StatsScreen(modifier: Modifier) {
 
     val modelProducer = remember { CartesianChartModelProducer() }
     val entriesPerDay = days.map { day ->
-        val count = entries.count { entry ->
+        val count = entries.value.count { entry ->
             Instant.ofEpochMilli(entry.timestamp)
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate() == day

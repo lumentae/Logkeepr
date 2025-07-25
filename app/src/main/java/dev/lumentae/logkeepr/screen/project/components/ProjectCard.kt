@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.lumentae.logkeepr.Globals
+import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
 import dev.lumentae.logkeepr.data.database.entity.TagEntity
 import dev.lumentae.logkeepr.screen.project.tag.ModifyTagScreen
@@ -48,8 +48,6 @@ fun ProjectCard(
     var editingTag by remember { mutableStateOf(false) }
     var tagToEdit by remember { mutableStateOf<TagEntity?>(null) }
 
-    val projectDao = Globals.DATABASE.projectDao()
-
     if (showEditTag) {
         ModifyTagScreen(
             onTagAdded = {
@@ -62,12 +60,12 @@ fun ProjectCard(
                     // Update existing tag
                     tagToEdit?.name = tagName
                     tagToEdit?.color = tagColor
-                    projectDao.updateTag(
+                    DatabaseManager.updateTag(
                         tagToEdit!!
                     )
                 } else {
                     // Insert new tag
-                    projectDao.insertTag(
+                    DatabaseManager.insertTag(
                         TagEntity(
                             name = tagName,
                             color = tagColor,
@@ -80,7 +78,7 @@ fun ProjectCard(
                 editingTag = false
                 tagToEdit = null
                 shouldRefresh.value = true
-                tagList = projectDao.getTagsForProject(project.id)
+                tagList = DatabaseManager.getTagsForProject(project.id)
             },
             onCancel = {
                 editingTag = false
@@ -89,12 +87,12 @@ fun ProjectCard(
             },
             onDelete = {
                 if (editingTag && tagToEdit != null) {
-                    projectDao.deleteTag(tagToEdit!!)
+                    DatabaseManager.deleteTag(tagToEdit!!)
                     editingTag = false
                     tagToEdit = null
                     showEditTag = false
                     shouldRefresh.value = true
-                    tagList = projectDao.getTagsForProject(project.id)
+                    tagList = DatabaseManager.getTagsForProject(project.id)
                 }
             },
             editing = editingTag,
