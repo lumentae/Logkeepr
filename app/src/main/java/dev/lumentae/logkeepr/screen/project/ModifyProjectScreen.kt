@@ -24,9 +24,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.content.ContextCompat.getString
+import dev.lumentae.logkeepr.R
 import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
 
 @Composable
@@ -61,7 +64,10 @@ fun ModifyProjectScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = if (editing) "Edit Project" else "Add Project",
+                    text = if (editing) getString(
+                        LocalContext.current,
+                        R.string.edit_project
+                    ) else getString(LocalContext.current, R.string.add_project),
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(4.dp)
                 )
@@ -73,7 +79,7 @@ fun ModifyProjectScreen(
                             it.isEmpty() || projects.any { project -> project.name == it }
                     },
                     isError = projects.any { it.name == name.value } || name.value.isEmpty(),
-                    label = { Text("Project Name") },
+                    label = { Text(getString(LocalContext.current, R.string.project_name)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
@@ -82,7 +88,7 @@ fun ModifyProjectScreen(
                 TextField(
                     value = description.value,
                     onValueChange = { description.value = it },
-                    label = { Text("Description") },
+                    label = { Text(getString(LocalContext.current, R.string.description)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
@@ -117,7 +123,7 @@ fun ModifyProjectScreen(
                                 !Regex("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$").matches(it)
                         },
                         isError = !Regex("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$").matches(color.value),
-                        label = { Text("Color (Hex)") },
+                        label = { Text(getString(LocalContext.current, R.string.color_hex)) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp),
@@ -133,7 +139,7 @@ fun ModifyProjectScreen(
                         onClick = { onCancel() },
                         modifier = Modifier.padding(8.dp),
                     ) {
-                        Text("Cancel")
+                        Text(getString(LocalContext.current, R.string.cancel))
                     }
                     TextButton(
                         onClick = {
@@ -144,7 +150,7 @@ fun ModifyProjectScreen(
                         },
                         modifier = Modifier.padding(8.dp),
                     ) {
-                        Text("Confirm")
+                        Text(getString(LocalContext.current, R.string.confirm))
                     }
                 }
             }

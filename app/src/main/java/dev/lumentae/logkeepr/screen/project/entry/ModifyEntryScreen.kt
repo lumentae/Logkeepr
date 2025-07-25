@@ -23,9 +23,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.content.ContextCompat.getString
+import dev.lumentae.logkeepr.R
 import dev.lumentae.logkeepr.screen.project.utils.parseDurationToSeconds
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,7 +63,10 @@ fun ModifyEntryScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = if (editing) "Edit Entry" else "Add Entry",
+                    text = if (editing) getString(
+                        LocalContext.current,
+                        R.string.edit_entry
+                    ) else getString(LocalContext.current, R.string.add_entry),
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(4.dp)
                 )
@@ -70,7 +76,7 @@ fun ModifyEntryScreen(
                         title = it
                     },
                     isError = title.isEmpty(),
-                    label = { Text("Entry Title") },
+                    label = { Text(getString(LocalContext.current, R.string.entry_title)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
@@ -79,7 +85,7 @@ fun ModifyEntryScreen(
                 TextField(
                     value = description,
                     onValueChange = { description = it },
-                    label = { Text("Description") },
+                    label = { Text(getString(LocalContext.current, R.string.description)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
@@ -97,12 +103,12 @@ fun ModifyEntryScreen(
                         }
                     },
                     isError = timeSpentError,
-                    label = { Text("Time Spent (optional)") },
+                    label = { Text(getString(LocalContext.current, R.string.time_spent)) },
                     supportingText = {
                         if (timeSpentError) {
-                            Text("Invalid format. Use d, h, m, s (e.g., 1d 2h 30m 15s)")
+                            Text(getString(LocalContext.current, R.string.time_invalid_format))
                         } else if (timeSpent.isNotEmpty()) {
-                            Text("Format: d (days), h (hours), m (minutes), s (seconds)")
+                            Text(getString(LocalContext.current, R.string.time_format))
                         }
                     },
                     singleLine = true,
@@ -119,7 +125,7 @@ fun ModifyEntryScreen(
                         onClick = { onCancel() },
                         modifier = Modifier.padding(8.dp),
                     ) {
-                        Text("Cancel")
+                        Text(getString(LocalContext.current, R.string.cancel))
                     }
                     TextButton(
                         onClick = {
@@ -130,7 +136,7 @@ fun ModifyEntryScreen(
                         },
                         modifier = Modifier.padding(8.dp),
                     ) {
-                        Text("Confirm")
+                        Text(getString(LocalContext.current, R.string.confirm))
                     }
                 }
             }

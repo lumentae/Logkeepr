@@ -33,8 +33,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getString
 import androidx.navigation.NavController
+import dev.lumentae.logkeepr.R
 import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.data.database.entity.EntryEntity
 import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
@@ -150,7 +153,7 @@ fun ViewProjectScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Project") })
+            TopAppBar(title = { Text(getString(LocalContext.current, R.string.project)) })
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
@@ -158,7 +161,10 @@ fun ViewProjectScreen(
                 editEntry.value = false
                 editEntryId.longValue = 0
             }) {
-                Icon(Icons.Default.Add, contentDescription = "Add Log")
+                Icon(
+                    Icons.Default.Add,
+                    contentDescription = getString(LocalContext.current, R.string.add_log)
+                )
             }
         },
         modifier = modifier
@@ -186,15 +192,15 @@ fun ViewProjectScreen(
                         val deletePressed = remember { mutableIntStateOf(0) }
                         val deleteMessage = when (deletePressed.intValue) {
                             1 -> {
-                                "Are you sure?"
+                                getString(LocalContext.current, R.string.project_delete_confirm_1)
                             }
 
                             2 -> {
-                                "Really?"
+                                getString(LocalContext.current, R.string.project_delete_confirm_2)
                             }
 
                             else -> {
-                                "Delete"
+                                getString(LocalContext.current, R.string.delete)
                             }
                         }
                         Button(
@@ -217,7 +223,7 @@ fun ViewProjectScreen(
                                 projectShouldRefresh.value = true
                             },
                         ) {
-                            Text("Edit")
+                            Text(getString(LocalContext.current, R.string.edit))
                         }
                     }
                 }
@@ -238,14 +244,20 @@ fun ViewProjectScreen(
                             contentAlignment = Alignment.TopEnd
                         ) {
                             IconButton(onClick = { expanded = !expanded }) {
-                                Icon(Icons.Default.MoreVert, contentDescription = "More options")
+                                Icon(
+                                    Icons.Default.MoreVert,
+                                    contentDescription = getString(
+                                        LocalContext.current,
+                                        R.string.more_options
+                                    )
+                                )
                             }
                             DropdownMenu(
                                 expanded = expanded,
                                 onDismissRequest = { expanded = false }
                             ) {
                                 DropdownMenuItem(
-                                    text = { Text("Edit") },
+                                    text = { Text(getString(LocalContext.current, R.string.edit)) },
                                     onClick = {
                                         editEntry.value = true
                                         showAddEntryDialog.value = true
@@ -254,7 +266,14 @@ fun ViewProjectScreen(
                                     }
                                 )
                                 DropdownMenuItem(
-                                    text = { Text("Delete") },
+                                    text = {
+                                        Text(
+                                            getString(
+                                                LocalContext.current,
+                                                R.string.delete
+                                            )
+                                        )
+                                    },
                                     onClick = {
                                         DatabaseManager.deleteEntry(entry)
                                         // Refresh entries list after deletion

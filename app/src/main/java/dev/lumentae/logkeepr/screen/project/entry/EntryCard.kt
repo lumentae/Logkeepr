@@ -13,7 +13,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import dev.lumentae.logkeepr.R
 import dev.lumentae.logkeepr.data.database.entity.EntryEntity
 import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
 import java.time.Instant
@@ -37,12 +39,13 @@ fun EntryCard(
             ) {
                 Text(entry.title, style = MaterialTheme.typography.titleMedium)
                 Text(
-                    "🕒 ${formatDurationToString(entry.timeSpent)} | " +
-                            "📅 ${
-                                Instant.ofEpochMilli(entry.timestamp)
-                                    .atZone(ZoneId.systemDefault())
-                                    .toLocalDate()
-                            }",
+                    LocalContext.current.getString(
+                        R.string.entry_stats,
+                        formatDurationToString(entry.timeSpent),
+                        Instant.ofEpochMilli(entry.timestamp)
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate().toString()
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
