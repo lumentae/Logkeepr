@@ -72,14 +72,6 @@ object DatabaseManager {
     }
 
     // Taq query methods
-    fun getAllTags(): StateFlow<List<TagEntity>> {
-        return _tags.asStateFlow()
-    }
-
-    fun getTagById(tagId: Long): TagEntity? {
-        return _tags.value.find { it.id == tagId }
-    }
-
     fun getTagsForProject(projectId: Long): List<TagEntity> {
         return _tags.value.filter { it.projectId == projectId }
     }
