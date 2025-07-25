@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.lumentae.logkeepr.data.database.entity.EntryEntity
 import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
+import java.time.Instant
+import java.time.ZoneId
 
 @Composable
 fun EntryCard(
@@ -35,7 +37,12 @@ fun EntryCard(
             ) {
                 Text(entry.title, style = MaterialTheme.typography.titleMedium)
                 Text(
-                    "🕒 ${formatDurationToString(entry.timeSpent)}",
+                    "🕒 ${formatDurationToString(entry.timeSpent)} | " +
+                            "📅 ${
+                                Instant.ofEpochMilli(entry.timestamp)
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDate()
+                            }",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
