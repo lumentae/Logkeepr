@@ -11,7 +11,8 @@ import dev.lumentae.logkeepr.screen.settings.preference.PreferenceSection
 @Composable
 fun SettingsScreen(modifier: Modifier) {
     DefaultPageTemplate("Settings", modifier) {
-        PreferenceSection(Preferences.Sections.theme) {
+        PreferenceSection(Preferences.Sections.general) {
+            Preference(Preferences.Keys.language)
             Preference(Preferences.Keys.useDarkMode)
         }
     }

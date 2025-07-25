@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name" translatable="false">Logkeepr</string>
+    <string name="config_section_general">General</string>
     <string name="config_entry_useDarkMode">Dark Mode</string>
-    <string name="config_section_theme">Theme</string>
+    <string name="config_entry_language">Language</string>
+    <string name="language_english">English</string>
+    <string name="language_german">German</string>
 </resources>
