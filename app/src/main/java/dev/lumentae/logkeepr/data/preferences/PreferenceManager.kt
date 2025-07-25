@@ -1,31 +1,37 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package dev.lumentae.logkeepr.data.preferences
 
 import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
 
 object PreferenceManager {
     private val Context.dataStore by preferencesDataStore(name = "settings")
 
     suspend fun <T> setPreference(context: Context, key: PreferenceKey<T>, value: T) {
+        key.value.value = value
         context.dataStore.edit { settings ->
             settings[key.key] = value
         }
     }
 
-    fun <T> getPreference(context: Context, key: PreferenceKey<T>): Flow<T?> {
-        return context.dataStore.data.map { settings ->
-            settings[key.key] ?: key.defaultValue
-        }
-    }
+    @Composable
+    fun <T> getPreference(context: Context, key: PreferenceKey<T>): MutableState<T> {
+        val state = key.value
 
-    fun <T> getPreferenceValue(context: Context, key: PreferenceKey<T>): T {
-        return runBlocking {
-            getPreference(context, key).map { it ?: key.defaultValue }.first()
+        LaunchedEffect(key) {
+            context.dataStore.data.map { settings ->
+                settings[key.key] ?: key.value.value
+            }.collect { value ->
+                state.value = value
+            }
         }
+
+        return state
     }
 }

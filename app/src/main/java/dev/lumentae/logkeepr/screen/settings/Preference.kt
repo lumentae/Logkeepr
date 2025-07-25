@@ -4,7 +4,6 @@ package dev.lumentae.logkeepr.screen.settings
 
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat.getString
@@ -17,11 +16,10 @@ import kotlinx.coroutines.launch
 fun <T> Preference(preference: PreferenceKey<T>) {
     val context = LocalContext.current
     val preferenceValue = PreferenceManager.getPreference(context, preference)
-        .collectAsState(initial = false)
 
     val scope = rememberCoroutineScope()
 
-    when (preference.defaultValue) {
+    when (preference.value.value) {
         is Boolean -> {
             PreferenceContainer<T>(
                 name = getString(context, preference.translationKey),

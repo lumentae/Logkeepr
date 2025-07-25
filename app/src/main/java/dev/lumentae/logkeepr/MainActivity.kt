@@ -30,6 +30,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import dev.lumentae.logkeepr.data.database.AppDatabase
 import dev.lumentae.logkeepr.data.database.DatabaseManager
+import dev.lumentae.logkeepr.data.preferences.PreferenceManager
+import dev.lumentae.logkeepr.data.preferences.Preferences
 import dev.lumentae.logkeepr.screen.*
 import dev.lumentae.logkeepr.screen.project.ProjectsScreen
 import dev.lumentae.logkeepr.screen.project.ViewProjectScreen
@@ -51,7 +53,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            LogkeeprTheme {
+            val darkTheme = PreferenceManager.getPreference(this, Preferences.Entries.useDarkMode)
+            LogkeeprTheme(
+                darkTheme = darkTheme.value
+            ) {
                 AppNavigationBar()
             }
         }

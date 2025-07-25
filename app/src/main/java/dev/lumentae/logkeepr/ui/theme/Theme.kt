@@ -7,8 +7,6 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import dev.lumentae.logkeepr.data.preferences.PreferenceKeys
-import dev.lumentae.logkeepr.data.preferences.PreferenceManager
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -24,8 +22,7 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun LogkeeprTheme(
-    darkTheme: Boolean = PreferenceManager
-        .getPreferenceValue(LocalContext.current, PreferenceKeys.useDarkMode),
+    darkTheme: Boolean,
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
