@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat.getString
+import androidx.core.graphics.toColorInt
 import dev.lumentae.logkeepr.R
 import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
 
@@ -101,7 +102,7 @@ fun ModifyProjectScreen(
                             .offset(y = 24.dp, x = 12.dp)
                             .background(
                                 color = try {
-                                    Color(android.graphics.Color.parseColor(color.value))
+                                    Color(color.value.toColorInt())
                                 } catch (_: Exception) {
                                     Color.White
                                 },

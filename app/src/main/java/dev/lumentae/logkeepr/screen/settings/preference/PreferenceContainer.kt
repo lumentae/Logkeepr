@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun <T> PreferenceContainer(name: String, widget: @Composable () -> Unit) {
+fun PreferenceContainer(name: String, widget: @Composable () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

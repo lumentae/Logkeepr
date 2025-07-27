@@ -57,7 +57,7 @@ fun ViewProjectScreen(
         return
     }
 
-    var projects = DatabaseManager.getAllProjects().collectAsState()
+    val projects = DatabaseManager.getAllProjects().collectAsState()
 
     var tags by remember { mutableStateOf(DatabaseManager.getTagsForProject(project.id)) }
     var entries by remember { mutableStateOf(DatabaseManager.getEntriesForProject(project.id)) }
@@ -68,9 +68,9 @@ fun ViewProjectScreen(
     if (showEditProjectDialog.value) {
         ModifyProjectScreen(
             onProjectAdded = {
-                var projectName = it.first
-                var description = it.second
-                var color = it.third
+                val projectName = it.first
+                val description = it.second
+                val color = it.third
 
                 project.name = projectName
                 project.description = description
@@ -93,20 +93,20 @@ fun ViewProjectScreen(
         )
     }
 
-    var showAddEntryDialog = remember { mutableStateOf(false) }
-    var editEntry = remember { mutableStateOf(false) }
-    var editEntryId = remember { mutableLongStateOf(0) }
+    val showAddEntryDialog = remember { mutableStateOf(false) }
+    val editEntry = remember { mutableStateOf(false) }
+    val editEntryId = remember { mutableLongStateOf(0) }
 
     if (showAddEntryDialog.value) {
-        var entryEntity = DatabaseManager.getEntryById(editEntryId.longValue)
+        val entryEntity = DatabaseManager.getEntryById(editEntryId.longValue)
         ModifyEntryScreen(
             onEntryAdded = {
-                var title = it.first
-                var description = it.second
-                var timeSpent = it.third
+                val title = it.first
+                val description = it.second
+                val timeSpent = it.third
 
                 if (editEntry.value) {
-                    var entry = DatabaseManager.getEntryById(editEntryId.longValue)!!
+                    val entry = DatabaseManager.getEntryById(editEntryId.longValue)!!
                     entry.title = title
                     entry.content = description
                     entry.timeSpent = timeSpent

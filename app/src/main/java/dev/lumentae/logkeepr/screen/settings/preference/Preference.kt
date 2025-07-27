@@ -36,7 +36,7 @@ fun <T> Preference(preference: PreferenceKey<T>) {
 
     when (preference.value.value) {
         is Boolean -> {
-            PreferenceContainer<T>(
+            PreferenceContainer(
                 name = getString(context, preference.translationKey),
                 widget = {
                     Switch(
@@ -55,7 +55,7 @@ fun <T> Preference(preference: PreferenceKey<T>) {
         is Int -> {
             if (preference.extras == "streak") {
 
-                PreferenceContainer<T>(
+                PreferenceContainer(
                     name = getString(context, preference.translationKey),
                     widget = {
                         Box(
@@ -86,7 +86,7 @@ fun <T> Preference(preference: PreferenceKey<T>) {
         }
 
         is String -> {
-            PreferenceContainer<T>(
+            PreferenceContainer(
                 name = getString(context, preference.translationKey),
                 widget = {
                     if (preference.extras is Map<*, *>) {

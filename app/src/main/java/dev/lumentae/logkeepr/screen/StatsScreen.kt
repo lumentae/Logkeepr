@@ -38,7 +38,7 @@ import kotlin.math.max
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatsScreen(modifier: Modifier) {
-    var entries = DatabaseManager.getAllEntries().collectAsState()
+    val entries = DatabaseManager.getAllEntries().collectAsState()
 
     val now = System.currentTimeMillis()
     val days = List(7) { offset ->
@@ -117,7 +117,7 @@ class SingularItemPlacer : VerticalAxis.ItemPlacer {
         maxLabelHeight: Float,
         position: Axis.Position.Vertical
     ): List<Double> {
-        var labelValues = mutableListOf<Double>()
+        val labelValues = mutableListOf<Double>()
         for (i in 0 until maxLabelHeight.toInt()) {
             labelValues.add(i.toDouble())
         }

@@ -23,12 +23,18 @@ fun Section(
 ) {
     if (!title.enabled.value) return
 
-    val colors = if (title.color == Color.Unspecified) {
-        CardDefaults.cardColors()
-    } else if (title.color == Color.Red) {
-        CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
-    } else {
-        CardDefaults.cardColors(containerColor = title.color)
+    val colors = when (title.color) {
+        Color.Unspecified -> {
+            CardDefaults.cardColors()
+        }
+
+        Color.Red -> {
+            CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+        }
+
+        else -> {
+            CardDefaults.cardColors(containerColor = title.color)
+        }
     }
 
     Card(

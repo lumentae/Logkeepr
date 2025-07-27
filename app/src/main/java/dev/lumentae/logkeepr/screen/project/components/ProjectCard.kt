@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.toColorInt
 import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
 import dev.lumentae.logkeepr.data.database.entity.TagEntity
@@ -52,8 +53,8 @@ fun ProjectCard(
     if (showEditTag) {
         ModifyTagScreen(
             onTagAdded = {
-                var tagName = it.first
-                var tagColor = it.second
+                val tagName = it.first
+                val tagColor = it.second
 
                 showEditTag = false
                 // Add the new tag to the project
@@ -111,7 +112,7 @@ fun ProjectCard(
     }
 
     val containerColor = try {
-        Color(android.graphics.Color.parseColor(project.color))
+        Color(project.color?.toColorInt() ?: 0)
     } catch (_: Exception) {
         Color.Unspecified
     }
@@ -156,7 +157,7 @@ fun ProjectCard(
             ) {
                 tagList.forEach {
                     val tagColor = try {
-                        Color(android.graphics.Color.parseColor(it.color))
+                        Color(it.color?.toColorInt() ?: 0)
                     } catch (_: Exception) {
                         MaterialTheme.colorScheme.surfaceVariant
                     }

@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.getString
+import androidx.core.graphics.toColorInt
 import dev.lumentae.logkeepr.R
 import kotlin.math.pow
 
@@ -34,7 +35,7 @@ fun ColorPicker(
                 .offset(y = 24.dp, x = 12.dp)
                 .background(
                     color = try {
-                        Color(android.graphics.Color.parseColor(color.value))
+                        Color(color.value.toColorInt())
                     } catch (_: Exception) {
                         Color.White
                     },

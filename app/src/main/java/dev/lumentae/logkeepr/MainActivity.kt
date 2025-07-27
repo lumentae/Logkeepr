@@ -34,7 +34,8 @@ import dev.lumentae.logkeepr.data.database.AppDatabase
 import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.data.preferences.PreferenceManager
 import dev.lumentae.logkeepr.data.preferences.Preferences
-import dev.lumentae.logkeepr.screen.*
+import dev.lumentae.logkeepr.screen.HomeScreen
+import dev.lumentae.logkeepr.screen.StatsScreen
 import dev.lumentae.logkeepr.screen.project.ProjectsScreen
 import dev.lumentae.logkeepr.screen.project.ViewProjectScreen
 import dev.lumentae.logkeepr.screen.settings.SettingsScreen
@@ -122,7 +123,7 @@ fun AppNavHost(
 fun AppNavigationBar(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val startDestination = Destination.HOME
-    var selectedDestination = rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
+    val selectedDestination = rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
 
     val context = LocalContext.current
 

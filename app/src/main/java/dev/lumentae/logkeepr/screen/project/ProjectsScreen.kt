@@ -4,7 +4,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -27,15 +33,15 @@ fun ProjectsScreen(
     navController: NavController,
     createNewProject: Boolean = false
 ) {
-    var projects = DatabaseManager.getAllProjects().collectAsState(initial = emptyList())
+    val projects = DatabaseManager.getAllProjects().collectAsState(initial = emptyList())
 
     val shouldShowDialog = remember { mutableStateOf(createNewProject) }
     if (shouldShowDialog.value) {
         ModifyProjectScreen(
             onProjectAdded = {
-                var projectName = it.first
-                var description = it.second
-                var color = it.third
+                val projectName = it.first
+                val description = it.second
+                val color = it.third
 
                 shouldShowDialog.value = false
                 val id = System.currentTimeMillis() // Generate a unique ID for the project

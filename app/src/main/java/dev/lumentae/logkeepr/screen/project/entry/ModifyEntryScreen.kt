@@ -94,7 +94,7 @@ fun ModifyEntryScreen(
                     value = timeSpent,
                     onValueChange = {
                         timeSpentError =
-                            !Regex("^(?=.*\\d+[dhms])(?:(\\d+)d\\s*)?(?:(\\d+)h\\s*)?(?:(\\d+)m\\s*)?(?:(\\d+)s)?\$").matches(
+                            !Regex("^(?=.*\\d+[dhms])(?:(\\d+)d\\s*)?(?:(\\d+)h\\s*)?(?:(\\d+)m\\s*)?(?:(\\d+)s)?$").matches(
                                 it
                             )
                         timeSpent = it

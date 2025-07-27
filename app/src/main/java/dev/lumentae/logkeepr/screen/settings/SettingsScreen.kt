@@ -1,5 +1,6 @@
 package dev.lumentae.logkeepr.screen.settings
 
+import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
@@ -9,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat.getString
 import dev.lumentae.logkeepr.R
+import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.data.preferences.Preferences
 import dev.lumentae.logkeepr.screen.components.DefaultPageTemplate
 import dev.lumentae.logkeepr.screen.settings.action.ActionButton
@@ -27,11 +29,16 @@ fun SettingsScreen(modifier: Modifier) {
         Section(Preferences.Sections.data) {
             ActionButton(
                 text = getString(context, R.string.export_data),
-                onClick = {}
+                onClick = {
+                    val export = DatabaseManager.exportDatabase()
+                    Log.d("SettingsScreen", "Exported data: $export")
+                }
             )
             ActionButton(
                 text = getString(context, R.string.import_data),
-                onClick = {}
+                onClick = {
+
+                }
             )
         }
         Section(Preferences.Sections.danger) {
@@ -50,6 +57,7 @@ fun SettingsScreen(modifier: Modifier) {
                         2 -> resetDataText.value = getString(context, R.string.confirm_2)
                         3 -> {
                             resetDataText.value = getString(context, R.string.reset_data)
+                            // TODO: Enable this when the backup and restore feature is implemented
                             //Preferences.Keys.setStreak.onChange(mutableIntStateOf(0))
                             //DatabaseManager.resetData()
                             resetDataCounter.intValue = 0

@@ -3,16 +3,17 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     namespace = "dev.lumentae.logkeepr"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "dev.lumentae.logkeepr"
         minSdk = 34
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -64,6 +65,10 @@ dependencies {
     implementation(libs.vico.compose.m3)
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.filekit.core)
+    implementation(libs.filekit.dialogs.compose)
+    implementation(libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

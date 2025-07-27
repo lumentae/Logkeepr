@@ -34,12 +34,12 @@ import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
 @Composable
 fun HomeScreen(modifier: Modifier, navController: NavController) {
 
-    var lastProject = DatabaseManager.getLastChangedProject()
-    var tags = DatabaseManager.getTagsForProject(lastProject?.id ?: -1)
-    var projects = DatabaseManager.getAllProjects().collectAsState()
-    var entries = DatabaseManager.getAllEntries().collectAsState()
-    var totalTime = entries.value.sumOf { it.timeSpent }
-    var streakDays = DatabaseManager.getAllStreaks()
+    val lastProject = DatabaseManager.getLastChangedProject()
+    val tags = DatabaseManager.getTagsForProject(lastProject?.id ?: -1)
+    val projects = DatabaseManager.getAllProjects().collectAsState()
+    val entries = DatabaseManager.getAllEntries().collectAsState()
+    val totalTime = entries.value.sumOf { it.timeSpent }
+    val streakDays = DatabaseManager.getAllStreaks()
         .collectAsState().value.count() - 1 // Exclude the current streak day
 
     val context = LocalContext.current

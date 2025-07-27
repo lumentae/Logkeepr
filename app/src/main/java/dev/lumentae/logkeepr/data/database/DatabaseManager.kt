@@ -43,6 +43,15 @@ object DatabaseManager {
         }
     }
 
+    fun exportDatabase(): String {
+        val projects = _projects.value.joinToString("\n") { it.toString() }
+        val entries = _entries.value.joinToString("\n") { it.toString() }
+        val tags = _tags.value.joinToString("\n") { it.toString() }
+        val streaks = _streaks.value.joinToString("\n") { it.toString() }
+
+        return "Projects:\n$projects\n\nEntries:\n$entries\n\nTags:\n$tags\n\nStreaks:\n$streaks"
+    }
+
     // Project query methods
     fun getAllProjects(): StateFlow<List<ProjectEntity>> {
         return _projects.asStateFlow()
