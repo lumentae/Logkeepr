@@ -1,6 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package dev.lumentae.logkeepr.screen.settings
+package dev.lumentae.logkeepr.screen.settings.preference
 
 import androidx.compose.foundation.interaction.Interaction
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat.getString
 import dev.lumentae.logkeepr.data.preferences.PreferenceKey
 import dev.lumentae.logkeepr.data.preferences.PreferenceManager
-import dev.lumentae.logkeepr.screen.settings.preference.PreferenceContainer
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -45,6 +44,7 @@ fun <T> Preference(preference: PreferenceKey<T>) {
                         onCheckedChange = { isChecked ->
                             scope.launch {
                                 PreferenceManager.setPreference(context, preference, isChecked as T)
+                                preference.onChange(preferenceValue)
                             }
                         }
                     )
@@ -53,7 +53,36 @@ fun <T> Preference(preference: PreferenceKey<T>) {
         }
 
         is Int -> {
-            // TODO: Implement Int preference handling
+            if (preference.extras == "streak") {
+
+                PreferenceContainer<T>(
+                    name = getString(context, preference.translationKey),
+                    widget = {
+                        Box(
+                            modifier = Modifier.fillMaxWidth(.5f)
+                        ) {
+                            OutlinedTextField(
+                                value = (preferenceValue.value as Int - 1).toString(),
+                                onValueChange = { newValue ->
+                                    var intValue = newValue.toIntOrNull()
+                                    if (intValue != null) {
+                                        intValue += 1
+                                        scope.launch {
+                                            PreferenceManager.setPreference(
+                                                context,
+                                                preference,
+                                                intValue as T
+                                            )
+                                            preference.onChange(preferenceValue)
+                                        }
+                                    }
+                                },
+                                label = { Text(getString(context, preference.translationKey)) },
+                            )
+                        }
+                    }
+                )
+            }
         }
 
         is String -> {
@@ -68,7 +97,7 @@ fun <T> Preference(preference: PreferenceKey<T>) {
                         var selectedOption by remember { mutableStateOf(preferenceValue.value as String) }
 
                         Box(
-                            modifier = Modifier.fillMaxWidth(.7f)
+                            modifier = Modifier.fillMaxWidth(.5f)
                         ) {
                             OutlinedTextField(
                                 value = getString(context, options[selectedOption]!!),
@@ -97,6 +126,7 @@ fun <T> Preference(preference: PreferenceKey<T>) {
                                                     preference,
                                                     options.keys.elementAt(index) as T
                                                 )
+                                                preference.onChange(preferenceValue)
                                             }
                                         },
                                     )

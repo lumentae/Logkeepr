@@ -2,6 +2,7 @@ package dev.lumentae.logkeepr.data.database
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import dev.lumentae.logkeepr.data.database.entity.StreakEntity
 import java.time.Instant
@@ -12,7 +13,7 @@ interface StreakDao {
     @Query("SELECT * FROM streak ORDER BY timestamp DESC")
     fun getAllStreaks(): List<StreakEntity>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertStreak(vararg streaks: StreakEntity)
 
     @Query("DELETE FROM streak")

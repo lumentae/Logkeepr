@@ -1,5 +1,6 @@
 package dev.lumentae.logkeepr.data.database
 
+import androidx.compose.runtime.MutableState
 import dev.lumentae.logkeepr.Globals
 import dev.lumentae.logkeepr.data.database.entity.EntryEntity
 import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
@@ -26,6 +27,20 @@ object DatabaseManager {
         _entries.value = projectDao.getAllEntries()
         _tags.value = projectDao.getAllTags()
         _streaks.value = streakDao.getAllStreaks()
+    }
+
+    fun resetData() {
+        _projects.value = emptyList()
+        _entries.value = emptyList()
+        _tags.value = emptyList()
+        _streaks.value = emptyList()
+
+        Globals.DATABASE_SCOPE.launch {
+            projectDao.clearAllProjects()
+            projectDao.clearAllEntries()
+            projectDao.clearAllTags()
+            streakDao.clearAll()
+        }
     }
 
     // Project query methods
@@ -210,5 +225,20 @@ object DatabaseManager {
                 timestamp = newEntryDay.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
             )
         )
+    }
+
+    fun setStreak(length: MutableState<Int>) {
+        clearAll()
+        var timestamp = System.currentTimeMillis()
+        for (i in 0 until length.value) {
+            timestamp -= 24 * 60 * 60 * 1000L // Subtract one day in milliseconds
+            insertStreak(
+                StreakEntity(
+                    timestamp = Instant.ofEpochMilli(timestamp)
+                        .atZone(ZoneOffset.UTC).toLocalDate()
+                        .atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+                )
+            )
+        }
     }
 }

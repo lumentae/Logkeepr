@@ -192,11 +192,11 @@ fun ViewProjectScreen(
                         val deletePressed = remember { mutableIntStateOf(0) }
                         val deleteMessage = when (deletePressed.intValue) {
                             1 -> {
-                                getString(LocalContext.current, R.string.project_delete_confirm_1)
+                                getString(LocalContext.current, R.string.confirm_1)
                             }
 
                             2 -> {
-                                getString(LocalContext.current, R.string.project_delete_confirm_2)
+                                getString(LocalContext.current, R.string.confirm_2)
                             }
 
                             else -> {

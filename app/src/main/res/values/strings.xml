@@ -8,7 +8,7 @@
     <string name="stats">Stats</string>
     <string name="home_last_project">Last Project</string>
     <string name="no_projects">No projects found. Click the "+" button to add a new project!</string>
-    <string name="home_welcome">Welcome to LogKeepr!</string>
+    <string name="home_welcome">Welcome to Logkeepr!</string>
     <string name="home_nice_to_see_you">Nice to see you again!</string>
     <plurals name="home_stats_projects">
         <item quantity="one">📂 %d project</item>
@@ -27,8 +27,8 @@
     <string name="settings">Settings</string>
     <string name="project">Project</string>
     <string name="add_log">Add log</string>
-    <string name="project_delete_confirm_1">Are you sure?</string>
-    <string name="project_delete_confirm_2">Really?</string>
+    <string name="confirm_1">Are you sure?</string>
+    <string name="confirm_2">Really?</string>
     <string name="delete">Delete</string>
     <string name="edit">Edit</string>
     <string name="more_options">More options</string>
@@ -53,4 +53,11 @@
     <string name="route_stats">Stats</string>
     <string name="route_projects">Projects</string>
     <string name="project_not_found">Project not found</string>
+    <string name="config_section_data">Data</string>
+    <string name="export_data">Export data</string>
+    <string name="import_data">Import data</string>
+    <string name="config_section_danger">Danger!</string>
+    <string name="reset_data">Reset data</string>
+    <string name="config_entry_setStreak">Set streak</string>
+    <string name="config_entry_enableDangerZone">Enable Danger Zone</string>
 </resources>

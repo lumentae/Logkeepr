@@ -33,6 +33,9 @@ interface ProjectDao {
     @Query("SELECT p.* FROM project p INNER JOIN entries e ON p.id = e.project_id ORDER BY e.timestamp DESC LIMIT 1")
     fun getLastChangedProject(): ProjectEntity?
 
+    @Query("DELETE FROM project")
+    fun clearAllProjects()
+
     // Taq query methods
     @Query("SELECT * FROM tags")
     fun getAllTags(): List<TagEntity>
@@ -52,6 +55,9 @@ interface ProjectDao {
     @Delete
     fun deleteTag(tag: TagEntity)
 
+    @Query("DELETE FROM tags")
+    fun clearAllTags()
+
     // Entry query methods
     @Query("SELECT * FROM entries")
     fun getAllEntries(): List<EntryEntity>
@@ -70,4 +76,7 @@ interface ProjectDao {
 
     @Delete
     fun deleteEntry(entry: EntryEntity)
+
+    @Query("DELETE FROM entries")
+    fun clearAllEntries()
 }
