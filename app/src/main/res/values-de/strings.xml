@@ -57,5 +57,5 @@
     <string name="config_section_danger">Vorsicht!</string>
     <string name="reset_data">Daten zurücksetzen</string>
     <string name="config_entry_setStreak">Streak setzen</string>
-    <string name="config_entry_enableDangerZone">Vorsichtszone aktivieren</string>
+    <string name="config_entry_enableDangerZone">Gefährliche Einstellungen aktivieren</string>
 </resources>
