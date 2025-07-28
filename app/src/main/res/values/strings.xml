@@ -2,7 +2,6 @@
     <string name="app_name" translatable="false">Logkeepr</string>
     <string name="config_section_general">General</string>
     <string name="config_entry_useDarkMode">Dark Mode</string>
-    <string name="config_entry_language">Language</string>
     <string name="language_english">English</string>
     <string name="language_german">German</string>
     <string name="stats">Stats</string>
@@ -58,5 +57,5 @@
     <string name="config_section_danger">Danger!</string>
     <string name="reset_data">Reset data</string>
     <string name="config_entry_setStreak">Set streak</string>
-    <string name="config_entry_enableDangerZone">Enable Danger Zone</string>
+    <string name="config_entry_enableDangerZone">Enable dangerous settings</string>
 </resources>
