@@ -7,7 +7,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import dev.lumentae.logkeepr.R
 import dev.lumentae.logkeepr.data.database.DatabaseManager
 
@@ -41,14 +40,6 @@ object Preferences {
     }
 
     object Keys {
-        val language = PreferenceKey(
-            stringPreferencesKey("language"), mutableStateOf("en"),
-            R.string.config_entry_language,
-            mapOf(
-                "en" to R.string.language_english,
-                "de" to R.string.language_german,
-            )
-        )
         val useDarkMode = PreferenceKey(
             booleanPreferencesKey("useDarkMode"), mutableStateOf(false),
             R.string.config_entry_useDarkMode

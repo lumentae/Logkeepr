@@ -1,6 +1,5 @@
 [versions]
 agp = "8.11.1"
-#noinspection GradleDependency
 kotlin = "2.2.20-Beta1"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -15,7 +14,6 @@ materialIconsExtended = "1.7.8"
 gson = "2.13.1"
 roomCompiler = "2.8.0-alpha01"
 roomRuntime = "2.8.0-alpha01"
-#noinspection GradleDependency
 ksp = "2.2.20-Beta1-2.0.2"
 vico = "2.1.3"
 datastore = "1.2.0-alpha02"

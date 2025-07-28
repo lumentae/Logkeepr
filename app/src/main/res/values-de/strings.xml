@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="config_section_general">Generell</string>
+    <string name="config_entry_useDarkMode">Dunkles Design</string>
+    <string name="config_entry_language">Sprache</string>
+    <string name="language_english">Englisch</string>
+    <string name="language_german">Deutsch</string>
+    <string name="stats">Statistiken</string>
+    <string name="home_last_project">Letztes Projekt</string>
+    <string name="no_projects">Keine Projekte gefunden. Klicke den + Knopf um ein neues hinzuzufügen</string>
+    <string name="home_welcome">Wilkommen zu Logkeepr!</string>
+    <string name="home_nice_to_see_you">Schön dich wiederzusehen!</string>
+    <plurals name="home_stats_projects">
+        <item quantity="one">📂 %d Projekt</item>
+        <item quantity="other">📂 %d Projekte</item>
+    </plurals>
+    <plurals name="home_stats_entries">
+        <item quantity="one">📗 %d Eintrag</item>
+        <item quantity="other">📗 %d Einträge</item>
+    </plurals>
+    <string name="home_stats_time">🕒 %1$s Zeit gesamt</string>
+    <plurals name="home_streak">
+        <item quantity="one">🔥 %d Tag Streak</item>
+        <item quantity="other">🔥 %d Tag Streak</item>
+    </plurals>
+    <string name="add_project">Projekt hinzufügen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="project">Projekt</string>
+    <string name="add_log">Protokoll hinzufügen</string>
+    <string name="confirm_1">Bist du sicher?</string>
+    <string name="confirm_2">Wirklich?</string>
+    <string name="delete">Löschen</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="more_options">Mehr optionen</string>
+    <string name="edit_project">Projekt bearbeiten</string>
+    <string name="project_name">Projekt name</string>
+    <string name="description">Beschreibung</string>
+    <string name="color_hex">Farbe (Hex)</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="confirm">Bestätigen</string>
+    <string name="edit_tag">Tag verändern</string>
+    <string name="add_tag">Tag hinzufügen</string>
+    <string name="tag_name">Tag name</string>
+    <string name="edit_entry">Eintrag verändern</string>
+    <string name="add_entry">Eintrag hinzufügen</string>
+    <string name="entry_title">Eintragstitel</string>
+    <string name="time_spent">Zeit verbracht (optional)</string>
+    <string name="time_invalid_format">Invalides Format. Benutze d, h, m, s (z.b., 1d 2h 30m 15s)</string>
+    <string name="time_format">Format: d (tage), h (stunden), m (minuten), s (sekunden)</string>
+    <string name="route_home">Startseite</string>
+    <string name="route_settings">Einstellungen</string>
+    <string name="route_projects">Projekte</string>
+    <string name="project_not_found">Projekt nicht gefunden</string>
+    <string name="config_section_data">Daten</string>
+    <string name="export_data">Daten exportieren</string>
+    <string name="import_data">Daten importieren</string>
+    <string name="config_section_danger">Vorsicht!</string>
+    <string name="reset_data">Daten zurücksetzen</string>
+    <string name="config_entry_setStreak">Streak setzen</string>
+    <string name="config_entry_enableDangerZone">Vorsichtszone aktivieren</string>
+</resources>

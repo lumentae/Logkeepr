@@ -49,7 +49,6 @@ fun SettingsScreen(modifier: Modifier) {
 
     DefaultPageTemplate(getString(context, R.string.settings), modifier) {
         Section(Preferences.Sections.general) {
-            Preference(Preferences.Keys.language)
             Preference(Preferences.Keys.useDarkMode)
             Preference(Preferences.Keys.enableDangerZone)
         }

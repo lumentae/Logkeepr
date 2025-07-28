@@ -44,13 +44,12 @@
     <string name="edit_entry">Edit entry</string>
     <string name="add_entry">Add entry</string>
     <string name="entry_title">Entry title</string>
-    <string name="time_spent">Time Spent (optional)</string>
+    <string name="time_spent">Time spent (optional)</string>
     <string name="time_invalid_format">Invalid format. Use d, h, m, s (e.g., 1d 2h 30m 15s)</string>
     <string name="time_format">Format: d (days), h (hours), m (minutes), s (seconds)</string>
-    <string name="entry_stats">🕒 %1$s | 📅 %2$s</string>
+    <string name="entry_stats" translatable="false">🕒 %1$s | 📅 %2$s</string>
     <string name="route_home">Home</string>
     <string name="route_settings">Settings</string>
-    <string name="route_stats">Stats</string>
     <string name="route_projects">Projects</string>
     <string name="project_not_found">Project not found</string>
     <string name="config_section_data">Data</string>

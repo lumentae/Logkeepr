@@ -77,7 +77,7 @@ enum class Destination(
 ) {
     HOME(R.string.route_home, Icons.Default.Dashboard),
     PROJECTS(R.string.route_projects, Icons.Default.Folder),
-    STATS(R.string.route_stats, Icons.Default.Insights),
+    STATS(R.string.stats, Icons.Default.Insights),
     SETTINGS(R.string.route_settings, Icons.Default.Settings)
 }
 
