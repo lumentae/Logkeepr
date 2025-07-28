@@ -40,6 +40,8 @@ import dev.lumentae.logkeepr.screen.project.ProjectsScreen
 import dev.lumentae.logkeepr.screen.project.ViewProjectScreen
 import dev.lumentae.logkeepr.screen.settings.SettingsScreen
 import dev.lumentae.logkeepr.ui.theme.LogkeeprTheme
+import io.github.vinceglb.filekit.FileKit
+import io.github.vinceglb.filekit.dialogs.init
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +54,8 @@ class MainActivity : ComponentActivity() {
 
         DatabaseManager.loadDatabase()
         DatabaseManager.checkStreak()
+
+        FileKit.init(this)
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

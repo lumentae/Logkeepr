@@ -3,8 +3,9 @@ package dev.lumentae.logkeepr.data.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
-@kotlinx.serialization.Serializable
+@Serializable
 @Entity(tableName = "tags")
 data class TagEntity(
     @PrimaryKey var id: Long,

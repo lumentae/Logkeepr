@@ -3,8 +3,9 @@ package dev.lumentae.logkeepr.data.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
-@kotlinx.serialization.Serializable
+@Serializable
 @Entity(tableName = "entries")
 data class EntryEntity(
     @PrimaryKey var id: Long,

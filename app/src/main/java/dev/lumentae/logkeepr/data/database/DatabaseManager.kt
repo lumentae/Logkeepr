@@ -1,15 +1,22 @@
 package dev.lumentae.logkeepr.data.database
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import dev.lumentae.logkeepr.Globals
 import dev.lumentae.logkeepr.data.database.entity.EntryEntity
 import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
 import dev.lumentae.logkeepr.data.database.entity.StreakEntity
 import dev.lumentae.logkeepr.data.database.entity.TagEntity
+import io.github.vinceglb.filekit.PlatformFile
+import io.github.vinceglb.filekit.readString
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.encodeToJsonElement
 import java.time.Instant
 import java.time.ZoneOffset
 
@@ -29,6 +36,15 @@ object DatabaseManager {
         _streaks.value = streakDao.getAllStreaks()
     }
 
+    fun saveDatabase() {
+        Globals.DATABASE_SCOPE.launch {
+            projectDao.insertProject(*_projects.value.toTypedArray())
+            projectDao.insertEntry(*_entries.value.toTypedArray())
+            projectDao.insertTag(*_tags.value.toTypedArray())
+            streakDao.insertStreak(*_streaks.value.toTypedArray())
+        }
+    }
+
     fun resetData() {
         _projects.value = emptyList()
         _entries.value = emptyList()
@@ -44,12 +60,31 @@ object DatabaseManager {
     }
 
     fun exportDatabase(): String {
-        val projects = _projects.value.joinToString("\n") { it.toString() }
-        val entries = _entries.value.joinToString("\n") { it.toString() }
-        val tags = _tags.value.joinToString("\n") { it.toString() }
-        val streaks = _streaks.value.joinToString("\n") { it.toString() }
+        val projects = Json.encodeToJsonElement(_projects.value)
+        val entries = Json.encodeToJsonElement(_entries.value)
+        val tags = Json.encodeToJsonElement(_tags.value)
+        val streaks = Json.encodeToJsonElement(_streaks.value)
 
-        return "Projects:\n$projects\n\nEntries:\n$entries\n\nTags:\n$tags\n\nStreaks:\n$streaks"
+        return Json.encodeToString(listOf(projects, entries, tags, streaks))
+    }
+
+    fun importDatabase(file: PlatformFile) {
+        Globals.DATABASE_SCOPE.launch {
+            projectDao.clearAllProjects()
+            projectDao.clearAllEntries()
+            projectDao.clearAllTags()
+            streakDao.clearAll()
+
+            val data = file.readString()
+            val (projects, entries, tags, streaks) = Json.decodeFromString<List<JsonElement>>(data)
+            Log.d("DatabaseManager", "Importing data: $data")
+
+            _projects.value = Json.decodeFromJsonElement(projects)
+            _entries.value = Json.decodeFromJsonElement(entries)
+            _tags.value = Json.decodeFromJsonElement(tags)
+            _streaks.value = Json.decodeFromJsonElement(streaks)
+            saveDatabase()
+        }
     }
 
     // Project query methods
@@ -221,7 +256,7 @@ object DatabaseManager {
 
         val newEntryDay =
             Instant.ofEpochMilli(newEntryTimestamp).atZone(ZoneOffset.UTC).toLocalDate()
-        if (streakDays.contains(newEntryDay)) return
+        if (streakDays.contains(newEntryDay) || streakDays.isEmpty()) return
 
         val lastDay = streakDays.last()
         if (newEntryDay == lastDay.plusDays(1) || newEntryDay.isBefore(lastDay)) {
