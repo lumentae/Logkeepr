@@ -64,7 +64,8 @@ fun ProjectsScreen(
         )
     }
 
-    DefaultPageTemplate("Projects", modifier,
+    DefaultPageTemplate(
+        getString(LocalContext.current, R.string.route_projects), modifier,
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 shouldShowDialog.value = true

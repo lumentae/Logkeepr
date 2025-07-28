@@ -45,7 +45,7 @@ fun HomeScreen(modifier: Modifier, navController: NavController) {
     val context = LocalContext.current
     val resources = context.resources
 
-    DefaultPageTemplate("Home", modifier) {
+    DefaultPageTemplate(getString(LocalContext.current, R.string.route_home), modifier) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(),
