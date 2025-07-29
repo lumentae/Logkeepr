@@ -69,7 +69,7 @@ enum class Destination(
 ) {
     HOME(R.string.route_home, Icons.Default.Dashboard),
     PROJECTS(R.string.route_projects, Icons.Default.Folder),
-    STATS(R.string.stats, Icons.Default.Insights),
+    STATS(R.string.route_stats, Icons.Default.Insights),
     SETTINGS(R.string.route_settings, Icons.Default.Settings)
 }
 
@@ -132,11 +132,18 @@ fun AppNavHost(
 
 @Composable
 fun AppNavigationBar(modifier: Modifier = Modifier) {
-    val navController = rememberNavController()
-    val startDestination = Destination.HOME
-    val selectedDestination = rememberSaveable { mutableIntStateOf(0) }
-
     val context = LocalContext.current
+    val navController = rememberNavController()
+
+    val startPagePreference = PreferenceManager.getPreference(context, Preferences.Keys.startPage)
+    val startDestination = when (startPagePreference.value) {
+        "home" -> Destination.HOME
+        "projects" -> Destination.PROJECTS
+        "stats" -> Destination.STATS
+        "settings" -> Destination.SETTINGS
+        else -> Destination.HOME
+    }
+    val selectedDestination = rememberSaveable { mutableIntStateOf(0) }
 
     Scaffold(
         modifier = modifier,

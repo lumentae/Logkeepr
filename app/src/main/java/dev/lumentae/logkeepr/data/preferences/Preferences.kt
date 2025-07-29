@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import dev.lumentae.logkeepr.R
 import dev.lumentae.logkeepr.data.database.DatabaseManager
 
@@ -48,6 +49,16 @@ object Preferences {
             booleanPreferencesKey("enableDangerZone"), Sections.danger.enabled,
             R.string.config_entry_enableDangerZone,
             onChange = { Sections.danger.enabled.value = it.value }
+        )
+        val startPage = PreferenceKey(
+            stringPreferencesKey("startPage"), mutableStateOf("home"),
+            R.string.config_entry_startPage,
+            mapOf(
+                "home" to R.string.route_home,
+                "projects" to R.string.route_projects,
+                "stats" to R.string.route_stats,
+                "settings" to R.string.route_settings
+            )
         )
         val setStreak = PreferenceKey(
             intPreferencesKey("setStreak"), mutableIntStateOf(0),

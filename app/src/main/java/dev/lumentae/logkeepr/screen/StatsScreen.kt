@@ -77,7 +77,7 @@ fun StatsScreen(modifier: Modifier) {
     val context = LocalContext.current
     val resources = context.resources
 
-    DefaultPageTemplate(getString(LocalContext.current, R.string.stats), modifier) {
+    DefaultPageTemplate(getString(LocalContext.current, R.string.route_stats), modifier) {
         Card(
             modifier = Modifier.fillMaxWidth(),
             elevation = CardDefaults.cardElevation(),
