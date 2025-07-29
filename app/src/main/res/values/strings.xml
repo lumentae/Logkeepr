@@ -58,4 +58,8 @@
     <string name="reset_data">Reset data</string>
     <string name="config_entry_setStreak">Set streak</string>
     <string name="config_entry_enableDangerZone">Enable dangerous settings</string>
+    <string name="widget_stats_name">Statistics</string>
+    <string name="widget_stats_description">This widget displays your statistics</string>
+    <string name="widget_streak_name">Streak</string>
+    <string name="widget_streak_description">This widget displays your streak</string>
 </resources>

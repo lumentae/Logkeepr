@@ -20,7 +20,7 @@
     <string name="home_stats_time">🕒 %1$s Zeit gesamt</string>
     <plurals name="home_streak">
         <item quantity="one">🔥 %d Tag Streak</item>
-        <item quantity="other">🔥 %d Tag Streak</item>
+        <item quantity="other">🔥 %d Tage Streak</item>
     </plurals>
     <string name="add_project">Projekt hinzufügen</string>
     <string name="settings">Einstellungen</string>
@@ -57,4 +57,8 @@
     <string name="reset_data">Daten zurücksetzen</string>
     <string name="config_entry_setStreak">Streak setzen</string>
     <string name="config_entry_enableDangerZone">Gefährliche Einstellungen aktivieren</string>
+    <string name="widget_stats_name">Statistik</string>
+    <string name="widget_stats_description">Dieses Widget zeigt dir deine Statistiken an</string>
+    <string name="widget_streak_name">Streak</string>
+    <string name="widget_streak_description">Dieses Widget zeigt dir deinen Streak an</string>
 </resources>

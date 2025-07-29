@@ -29,8 +29,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.room.Room
-import dev.lumentae.logkeepr.data.database.AppDatabase
 import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.data.preferences.PreferenceManager
 import dev.lumentae.logkeepr.data.preferences.Preferences
@@ -45,13 +43,7 @@ import io.github.vinceglb.filekit.dialogs.init
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        Globals.DATABASE = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "logkeepr"
-        )
-            .allowMainThreadQueries()
-            .build()
-
+        DatabaseManager.initDatabase(applicationContext)
         DatabaseManager.loadDatabase()
         DatabaseManager.checkStreak()
 
@@ -96,10 +88,25 @@ fun AppNavHost(
         Destination.entries.forEach { destination ->
             composable(getString(context, destination.route)) {
                 when (destination) {
-                    Destination.HOME -> HomeScreen(modifier, navController)
-                    Destination.PROJECTS -> ProjectsScreen(modifier, navController)
-                    Destination.STATS -> StatsScreen(modifier)
-                    Destination.SETTINGS -> SettingsScreen(modifier)
+                    Destination.HOME -> {
+                        HomeScreen(modifier, navController)
+                        selectedDestination.intValue = destination.ordinal
+                    }
+
+                    Destination.PROJECTS -> {
+                        ProjectsScreen(modifier, navController)
+                        selectedDestination.intValue = destination.ordinal
+                    }
+
+                    Destination.STATS -> {
+                        StatsScreen(modifier)
+                        selectedDestination.intValue = destination.ordinal
+                    }
+
+                    Destination.SETTINGS -> {
+                        SettingsScreen(modifier)
+                        selectedDestination.intValue = destination.ordinal
+                    }
                 }
             }
         }
@@ -127,7 +134,7 @@ fun AppNavHost(
 fun AppNavigationBar(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val startDestination = Destination.HOME
-    val selectedDestination = rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
+    val selectedDestination = rememberSaveable { mutableIntStateOf(0) }
 
     val context = LocalContext.current
 

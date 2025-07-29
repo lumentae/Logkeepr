@@ -1,7 +1,9 @@
 package dev.lumentae.logkeepr.data.database
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.room.Room
 import dev.lumentae.logkeepr.Globals
 import dev.lumentae.logkeepr.data.database.entity.EntryEntity
 import dev.lumentae.logkeepr.data.database.entity.ProjectEntity
@@ -26,14 +28,33 @@ object DatabaseManager {
     private val _tags = MutableStateFlow<List<TagEntity>>(emptyList())
     private val _streaks = MutableStateFlow<List<StreakEntity>>(emptyList())
 
-    private val projectDao = Globals.DATABASE.projectDao()
-    private val streakDao = Globals.DATABASE.streakDao()
+    private lateinit var projectDao: ProjectDao
+    private lateinit var streakDao: StreakDao
+
+    var databaseInitialized = false
+    fun initDatabase(context: Context) {
+        if (databaseInitialized) return
+
+        databaseInitialized = true
+        Globals.DATABASE = Room.databaseBuilder(
+            context,
+            AppDatabase::class.java, "logkeepr"
+        )
+            .allowMainThreadQueries()
+            .build()
+
+        projectDao = Globals.DATABASE.projectDao()
+        streakDao = Globals.DATABASE.streakDao()
+
+        loadDatabase()
+    }
 
     fun loadDatabase() {
         _projects.value = projectDao.getAllProjects()
         _entries.value = projectDao.getAllEntries()
         _tags.value = projectDao.getAllTags()
         _streaks.value = streakDao.getAllStreaks()
+
     }
 
     fun saveDatabase() {
