@@ -1,17 +1,23 @@
 package dev.lumentae.logkeepr.screen
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.getString
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
@@ -30,6 +36,7 @@ import com.patrykandpatrick.vico.core.common.Position
 import dev.lumentae.logkeepr.R
 import dev.lumentae.logkeepr.data.database.DatabaseManager
 import dev.lumentae.logkeepr.screen.components.DefaultPageTemplate
+import dev.lumentae.logkeepr.screen.project.utils.formatDurationToString
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -62,7 +69,58 @@ fun StatsScreen(modifier: Modifier) {
     val formatter = DateTimeFormatter.ofPattern("EEE")
     val xLabels = days.map { it.format(formatter) }
 
+    val projects = DatabaseManager.getAllProjects().collectAsState()
+    val streakDays = DatabaseManager.getAllStreaks()
+        .collectAsState().value.count() - 1 // Exclude the current streak day
+    val totalTime = entries.value.sumOf { it.timeSpent }
+
+    val context = LocalContext.current
+    val resources = context.resources
+
     DefaultPageTemplate(getString(LocalContext.current, R.string.stats), modifier) {
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            elevation = CardDefaults.cardElevation(),
+        ) {
+            Text(
+                "${
+                    resources.getQuantityString(
+                        R.plurals.home_stats_projects,
+                        projects.value.count(),
+                        projects.value.count()
+                    )
+                }\n" +
+                        "${
+                            resources.getQuantityString(
+                                R.plurals.home_stats_entries,
+                                entries.value.count(),
+                                entries.value.count()
+                            )
+                        }\n" +
+                        context.getString(
+                            R.string.home_stats_time,
+                            formatDurationToString(totalTime)
+                        ),
+                modifier = Modifier.padding(16.dp),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        if (streakDays > 0) {
+            Spacer(Modifier.height(8.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                elevation = CardDefaults.cardElevation(),
+            ) {
+                Text(
+                    resources.getQuantityString(R.plurals.home_streak, streakDays, streakDays),
+                    modifier = Modifier.padding(16.dp),
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+        Spacer(Modifier.height(8.dp))
         Card(
             modifier = Modifier.fillMaxSize(),
             elevation = CardDefaults.cardElevation(),
